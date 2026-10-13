@@ -130,3 +130,38 @@ hitung();
 </script>
 </body>
 </html>
+<script>
+// JAM REALTIME WIB
+function updateJam() {
+  const now = new Date();
+  const options = { 
+    timeZone: 'Asia/Jakarta',
+    hour: '2-digit', 
+    minute: '2-digit', 
+    second: '2-digit',
+    hour12: false 
+  };
+  const tglOptions = {
+    timeZone: 'Asia/Jakarta',
+    weekday: 'long',
+    day: '2-digit',
+    month: 'long',
+    year: 'numeric'
+  };
+  
+  const jam = now.toLocaleTimeString('id-ID', options);
+  const tgl = now.toLocaleDateString('id-ID', tglOptions);
+  
+  const elJam = document.getElementById('jam') || document.getElementById('clock') || document.getElementById('waktu');
+  const elTgl = document.getElementById('tanggal') || document.getElementById('date');
+  
+  if(elJam) elJam.textContent = jam + ' WIB';
+  if(elTgl) elTgl.textContent = tgl;
+  
+  // coba semua kemungkinan ID
+  const allClock = document.querySelector('.jam, .clock, #jam-digital');
+  if(allClock && !elJam) allClock.textContent = jam + ' WIB';
+}
+setInterval(updateJam, 1000);
+updateJam();
+</script>
