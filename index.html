@@ -1,15 +1,15 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="id">
 <head>
 <meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<title>LAPORAN KAMTIB</title>
+<title>LAPORAN KAMTIB - DONGKER GELAP V3 FINAL</title>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
 <style>
 *{margin:0;padding:0;box-sizing:border-box;font-family:'Segoe UI',Arial,sans-serif}
 body{background:#ffffff;padding:12px;min-height:100vh}
 .container{max-width:1100px;margin:0 auto;background:#0f1e3d;border-radius:16px;overflow:hidden;box-shadow:0 10px 40px rgba(0,0,0,.3);border:3px solid #0f1e3d}
 .form{padding:14px 18px;background:#0f1e3d}
-label{font-size:10px;font-weight:800;color:#000;margin:8px 0 4px;display:block;text-transform:uppercase}
+label{font-size:10px;font-weight:800;color:#fff;margin:8px 0 4px;display:block;text-transform:uppercase}
 input,select,textarea{width:100%;padding:12px 11px;border:2px solid #000;border-radius:7px;font-size:16px;background:#ffffff;outline:none;font-weight:700;color:#000}
 .section{background:#ffffff;border:2px solid #000;border-radius:10px;padding:12px;margin-top:10px}
 .section-title{font-size:10px;font-weight:900;color:#fff;background:#0f1e3d;padding:5px 10px;border-radius:5px;display:inline-block;margin-bottom:8px;border:1px solid #000}
@@ -37,6 +37,7 @@ input,select,textarea{width:100%;padding:12px 11px;border:2px solid #000;border-
 .cetak-blok{display:grid;grid-template-columns:1fr 1fr 1fr 1fr;gap:6px}
 .cetak-foto{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:12px}
 .cetak-foto img{width:100%;height:320px;object-fit:contain;border:2px solid #000;border-radius:10px;background:#fff}
+.live-clock{background:#000;color:#f59e0b;padding:8px 14px;border-radius:8px;font-weight:900;font-size:14px;text-align:center;border:2px solid #f59e0b;letter-spacing:1px}
 @media (max-width:800px){
  body{padding:6px;background:#e5e7eb}
  .gridMain{grid-template-columns:1fr !important}
@@ -49,10 +50,14 @@ input,select,textarea{width:100%;padding:12px 11px;border:2px solid #000;border-
 <body>
 <div class="container">
 <div class="form">
-<div style="text-align:center;padding:10px 0;border-bottom:3px solid #f59e0b;margin-bottom:10px"><h1 style="font-size:22px;font-weight:900;color:#ffffff">LAPORAN KAMTIB</h1><p style="font-size:11px;color:#ffffff;font-weight:700">LAPAS KELAS IIA PEKANBARU - DONGKER GELAP V3 FINAL</p></div>
+<div style="text-align:center;padding:10px 0;border-bottom:3px solid #f59e0b;margin-bottom:10px">
+<h1 style="font-size:22px;font-weight:900;color:#ffffff">LAPORAN KAMTIB</h1>
+<p style="font-size:11px;color:#ffffff;font-weight:700">LAPAS KELAS IIA PEKANBARU</p>
+<div id="jamLive" class="live-clock">Loading Jam WIB...</div>
+</div>
 <div class="gridMain">
 <div>
-<div class="section"><div class="section-title">Tanggal & Jam</div><div class="grid2"><div><label>Tanggal</label><input type="date" id="tgl" value="2026-10-13"></div><div><label>Jam</label><input type="time" id="jam" value="16:28"></div></div></div>
+<div class="section"><div class="section-title">Tanggal & Jam (Otomatis WIB)</div><div class="grid2"><div><label>Tanggal</label><input type="date" id="tgl"></div><div><label>Jam</label><input type="time" id="jam" step="1"></div></div><div style="font-size:10px;color:#fff;font-weight:700;margin-top:6px">* Jam otomatis WIB Pekanbaru, jalan realtime</div></div>
 <div class="section"><div class="section-title">Petugas Jaga</div><label>Komandan Jaga</label><input type="text" id="komandan" value="tennku deswandi"><label>Wakil Komandan</label><input type="text" id="wakil" value="rov candra"><label>Regu Jaga</label><select id="regu"><option>Regu 1</option><option selected>Regu 4</option><option>Regu 2</option><option>Regu 3</option></select><div class="grid2"><div><label>Hadir</label><input type="number" id="hadir" value="15"></div><div><label>Tidak Hadir</label><input type="number" id="tidak" value="0"></div></div></div>
 </div>
 <div>
@@ -62,12 +67,12 @@ input,select,textarea{width:100%;padding:12px 11px;border:2px solid #000;border-
 <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px"><div class="section"><div class="section-title">Izin Keluar WBP</div><label>Jumlah Izin Keluar</label><input type="number" id="jmlIzin" value="0"><label>Perihal</label><select id="perihal"><option>Berobat - RSUD</option><option>Sidang PN</option><option>Lainnya</option></select><label>Keterangan</label><input type="text" id="ketIzin" placeholder="Blok C 2 org RSUD..."></div><div class="section"><div class="section-title">Kondisi Kamtib</div><label>Kondisi</label><select id="kondisi"><option>Aman dan Kondusif</option><option>Kondusif</option><option>Perlu Perhatian</option></select><label>Detail Kejadian</label><textarea id="detail" rows="4">aman terkendali</textarea></div></div>
 </div>
 </div>
-<div class="section"><div class="section-title">📸 DOKUMENTASI</div><div class="foto-wrap"><div class="fbtns"><button class="fbtn cam" onclick="camInput.click()">📷 Kamera</button><button class="fbtn" onclick="galInput.click()">🖼️ Galeri</button></div><div style="font-size:11px;font-weight:700;margin-top:8px">Pilih foto dari HP Axioo - Maks 4 foto</div><div class="preview" id="preview"></div></div></div>
+<div class="section"><div class="section-title">📸 DOKUMENTASI</div><div class="foto-wrap"><div class="fbtns"><button class="fbtn cam" onclick="camInput.click()">📷 Kamera</button><button class="fbtn" onclick="galInput.click()">🖼️ Galeri</button></div><div style="font-size:11px;font-weight:700;margin-top:8px;color:#000">Pilih foto dari HP Axioo - Maks 4 foto</div><div class="preview" id="preview"></div></div></div>
 <button class="btn-download" onclick="downloadFix()">📸 DOWNLOAD DOKUMENTASI</button>
 </div>
 </div>
 <div id="areaCetak">
-<div class="cetak-header"><h1>LAPORAN KAMTIB</h1><p>LAPAS KELAS IIA PEKANBARU - DONGKER GELAP</p><div id="cetakTglJam" style="margin-top:6px;font-size:13px;font-weight:700;color:#fbbf24"></div></div>
+<div class="cetak-header"><h1>LAPORAN KAMTIB</h1><p>LAPAS KELAS IIA PEKANBARU</p><div id="cetakTglJam" style="margin-top:6px;font-size:13px;font-weight:700;color:#fbbf24"></div></div>
 <div class="cetak-grid">
 <div>
 <div class="cetak-box"><h3>Tanggal & Jam</h3><div class="cetak-field"><label>Tanggal</label><div class="val" id="c-tgl"></div></div><div class="cetak-field"><label>Jam</label><div class="val" id="c-jam"></div></div></div>
@@ -112,7 +117,7 @@ function downloadFix(){
   document.getElementById('c-sisa').innerText=document.getElementById('sisaWbp').value;
   document.getElementById('c-kondisi').innerText=document.getElementById('kondisi').value;
   document.getElementById('c-detail').innerText=document.getElementById('detail').value;
-  document.getElementById('cetakTglJam').innerText=new Date().toLocaleDateString('id-ID',{weekday:'long',day:'numeric',month:'long',year:'numeric',hour:'2-digit',minute:'2-digit'})+' WIB';
+  document.getElementById('cetakTglJam').innerText=document.getElementById('jamLive').innerText;
   const cFoto=document.getElementById('c-foto');cFoto.innerHTML='';fileURLs.forEach(url=>{const img=document.createElement('img');img.src=url;cFoto.appendChild(img);});
   if(fileURLs.length===0){cFoto.innerHTML='<div style="color:#fff;font-size:12px;padding:20px;text-align:center;border:2px dashed #fff;border-radius:8px;width:100%">Tidak ada foto dokumentasi</div>';}
   const area=document.getElementById('areaCetak');
@@ -120,48 +125,33 @@ function downloadFix(){
   const btn=document.querySelector('.btn-download');btn.innerText='⏳ Membuat Dokumentasi...';
   setTimeout(()=>{
     html2canvas(area,{scale:2,useCORS:true,backgroundColor:'#0f1e3d',width:1200,windowWidth:1200,logging:false}).then(canvas=>{
-      const a=document.createElement('a');a.download=`Laporan-Kamtib-FINAL-${new Date().toISOString().slice(0,10)}.jpg`;a.href=canvas.toDataURL('image/jpeg',0.92);a.click();
+      const a=document.createElement('a');a.download=`Laporan-Kamtib-${new Date().toISOString().slice(0,10)}.jpg`;a.href=canvas.toDataURL('image/jpeg',0.92);a.click();
       area.style.position='absolute'; area.style.left='-9999px';
       btn.innerText='📸 DOWNLOAD DOKUMENTASI';
     });
   },600);
 }
 hitung();
+function updateJamWIB(){
+  const now = new Date();
+  const jakarta = new Date(now.toLocaleString('en-US',{timeZone:'Asia/Jakarta'}));
+  const yyyy = jakarta.getFullYear();
+  const mm = String(jakarta.getMonth()+1).padStart(2,'0');
+  const dd = String(jakarta.getDate()).padStart(2,'0');
+  const hh = String(jakarta.getHours()).padStart(2,'0');
+  const mi = String(jakarta.getMinutes()).padStart(2,'0');
+  const ss = String(jakarta.getSeconds()).padStart(2,'0');
+  const jamStr = `${hh}:${mi}:${ss}`;
+  const tglStr = jakarta.toLocaleDateString('id-ID',{weekday:'long', day:'2-digit', month:'long', year:'numeric'});
+  const elTgl = document.getElementById('tgl');
+  const elJam = document.getElementById('jam');
+  if(elTgl) elTgl.value = `${yyyy}-${mm}-${dd}`;
+  if(elJam) elJam.value = jamStr;
+  const live = document.getElementById('jamLive');
+  if(live) live.textContent = `${tglStr} | ${jamStr} WIB`;
+}
+setInterval(updateJamWIB, 1000);
+updateJamWIB();
 </script>
 </body>
 </html>
-<script>
-// JAM REALTIME WIB
-function updateJam() {
-  const now = new Date();
-  const options = { 
-    timeZone: 'Asia/Jakarta',
-    hour: '2-digit', 
-    minute: '2-digit', 
-    second: '2-digit',
-    hour12: false 
-  };
-  const tglOptions = {
-    timeZone: 'Asia/Jakarta',
-    weekday: 'long',
-    day: '2-digit',
-    month: 'long',
-    year: 'numeric'
-  };
-  
-  const jam = now.toLocaleTimeString('id-ID', options);
-  const tgl = now.toLocaleDateString('id-ID', tglOptions);
-  
-  const elJam = document.getElementById('jam') || document.getElementById('clock') || document.getElementById('waktu');
-  const elTgl = document.getElementById('tanggal') || document.getElementById('date');
-  
-  if(elJam) elJam.textContent = jam + ' WIB';
-  if(elTgl) elTgl.textContent = tgl;
-  
-  // coba semua kemungkinan ID
-  const allClock = document.querySelector('.jam, .clock, #jam-digital');
-  if(allClock && !elJam) allClock.textContent = jam + ' WIB';
-}
-setInterval(updateJam, 1000);
-updateJam();
-</script>
