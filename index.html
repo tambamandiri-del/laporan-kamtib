@@ -2,7 +2,7 @@
 <html lang="id">
 <head>
 <meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<title>LAPORAN KAMTIB - PATEN FINAL</title>
+<title>LAPORAN KAMTIB - PATEN + BEROBAT + PENGAWAL</title>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
 <style>
 *{margin:0;padding:0;box-sizing:border-box;font-family:'Segoe UI',Arial,sans-serif}
@@ -33,54 +33,170 @@ input,select,textarea{width:100%;padding:11px;border:2px solid #000;border-radiu
 .cetak-blok{display:grid;grid-template-columns:1fr 1fr 1fr 1fr;gap:6px}
 .cetak-foto{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:12px}
 .cetak-foto img{width:100%;height:320px;object-fit:contain;border:2px solid #000;border-radius:10px;background:#fff}
+/* TAMBAHAN BEROBAT */
+.berobat-item{background:#f1f5f9;border:2px solid #000;border-radius:8px;padding:8px;margin-top:8px}
+.btn-green{background:#16a34a;color:#fff;padding:6px 12px;border-radius:6px;border:2px solid #000;font-weight:800;cursor:pointer;font-size:11px}
+.btn-red{background:#dc2626;color:#fff;padding:4px 8px;border-radius:5px;border:2px solid #000;font-weight:800;cursor:pointer;font-size:10px}
+.btn-add-bar{display:flex;justify-content:space-between;align-items:center;background:#dcfce7;padding:6px 8px;border-radius:6px;border:2px solid #16a34a;margin-top:8px}
 @media (max-width:800px){body{padding:6px;background:#e5e7eb}.gridMain{grid-template-columns:1fr !important}.grid4{grid-template-columns:1fr 1fr !important}.grid2{grid-template-columns:1fr !important}}
 </style>
 </head>
 <body>
-<div class="container"><div class="form">
+<div class="container">
+<div class="form">
 <div style="text-align:center;padding:10px 0;border-bottom:3px solid #f59e0b;margin-bottom:10px">
 <h1 style="font-size:22px;font-weight:900;color:#fff">LAPORAN KAMTIB</h1>
 <p style="font-size:11px;color:#fff;font-weight:700">LAPAS KELAS IIA PEKANBARU</p>
-<div id="jamLive" class="live-clock">Loading WIB...</div></div>
-<div class="gridMain"><div>
-<div class="section"><div class="section-title">Tanggal & Jam (Otomatis WIB)</div><div class="grid2"><div><label>Tanggal</label><input type="date" id="tgl"></div><div><label>Jam</label><input type="time" id="jam" step="1"></div></div></div>
-<div class="section"><div class="section-title">Petugas Jaga</div><label>Komandan</label><input id="komandan" value=""><label>Wakil</label><input id="wakil" value=""><label>Regu</label><select id="regu"><option>Regu 1</option><option selected>Regu 4</option><option>Regu 2</option><option>Regu 3</option></select><div class="grid2"><div><label>Hadir</label><input id="hadir" value="15"></div><div><label>Tidak Hadir</label><input id="tidak" value="0"></div></div></div></div>
-<div><div class="section"><div class="section-title">Isi Hunian WBP - A-F + TIPIKOR + BPN</div><div class="grid4"><div><label>BLOK A</label><input type="number" class="blok" id="blokA" value="130"></div><div><label>BLOK B</label><input type="number" class="blok" id="blokB" value="200"></div><div><label>BLOK C</label><input type="number" class="blok" id="blokC" value="200"></div><div><label>BLOK D</label><input type="number" class="blok" id="blokD" value="200"></div><div><label>BLOK E</label><input type="number" class="blok" id="blokE" value="200"></div><div><label>BLOK F</label><input type="number" class="blok" id="blokF" value="200"></div><div><label style="color:#b45309">BLOK TIPIKOR</label><input type="number" class="blok" id="blokTIPIKOR" value="1235"></div><div><label style="color:#5b21b6">BLOK BPN</label><input type="number" class="blok" id="blokBPN" value="0"></div></div><div class="grid2" style="margin-top:10px"><div><label style="background:#f59e0b;padding:3px 6px;border-radius:4px;text-align:center">JUMLAH WBP (AUTO)</label><input type="number" id="total" readonly style="background:#fde68a;text-align:center;font-size:16px"></div><div><label style="background:#bbf7d0;padding:3px 6px;border-radius:4px;text-align:center">SISA DI DALAM</label><input type="number" id="sisaWbp" readonly style="background:#bbf7d0;text-align:center"></div></div><div class="grid2" style="margin-top:8px"><div><label>JUMLAH NARAPIDANA</label><input id="totalNapi" value="4520" style="text-align:center"></div><div><label>JUMLAH TAHANAN</label><input id="totalTahan" value="10" style="text-align:center"></div></div></div><div style="display:grid;grid-template-columns:1fr 1fr;gap:12px"><div class="section"><div class="section-title">Izin Keluar WBP</div><label>Jumlah Izin</label><input id="jmlIzin" type="number" value="0"><label>Perihal</label><select id="perihal"><option>Berobat - RSUD</option><option>Sidang PN</option><option>Lainnya</option></select><label>Keterangan</label><input id="ketIzin" placeholder="Blok C 2 org RSUD..."></div><div class="section"><div class="section-title">Kondisi Kamtib</div><label>Kondisi</label><select id="kondisi"><option>Aman dan Kondusif</option><option>Kondusif</option><option>Perlu Perhatian</option></select><label>Detail</label><textarea id="detail" rows="4">aman terkendali</textarea></div></div></div></div>
+<div id="jamLive" class="live-clock">Loading WIB...</div>
+</div>
+<div class="gridMain">
+<div>
+<div class="section"><div class="section-title">Tanggal & Jam (Otomatis WIB)</div>
+<div class="grid2"><div><label>Tanggal</label><input type="date" id="tgl"></div><div><label>Jam</label><input type="time" id="jam" step="1"></div></div></div>
+<div class="section"><div class="section-title">Petugas Jaga</div><label>Komandan</label><input id="komandan" value=><label>Wakil</label><input id="wakil" value=><label style="color:#000">Regu</label><select id="regu"><option>Regu 1</option><option selected>Regu 4</option><option>Regu 2</option><option>Regu 3</option></select><div class="grid2"><div><label>Hadir</label><input id="hadir" value="15"></div><div><label>Tidak Hadir</label><input id="tidak" value="0"></div></div></div>
+</div>
+<div>
+<div class="section"><div class="section-title">Isi Hunian WBP Per Blok - A-F + TIPIKOR + BPN</div>
+<div class="grid4">
+<div><label>BLOK A</label><input type="number" class="blok" id="blokA" value="0"></div>
+<div><label>BLOK B</label><input type="number" class="blok" id="blokB" value="0"></div>
+<div><label>BLOK C</label><input type="number" class="blok" id="blokC" value="0"></div>
+<div><label>BLOK D</label><input type="number" class="blok" id="blokD" value="0"></div>
+<div><label>BLOK E</label><input type="number" class="blok" id="blokE" value="0"></div>
+<div><label>BLOK F</label><input type="number" class="blok" id="blokF" value="0"></div>
+<div><label style="color:#b45309">BLOK TIPIKOR</label><input type="number" class="blok" id="blokTIPIKOR" value="0"></div>
+<div><label style="color:#5b21b6">BLOK BPN</label><input type="number" class="blok" id="blokBPN" value="0"></div>
+</div>
+<div class="grid2" style="margin-top:10px"><div><label style="background:#f59e0b;padding:3px 6px;border-radius:4px;text-align:center">JUMLAH WBP (AUTO)</label><input type="number" id="total" readonly style="background:#fde68a;text-align:center;font-size:16px"></div><div><label style="background:#bbf7d0;padding:3px 6px;border-radius:4px;text-align:center">SISA DI DALAM</label><input type="number" id="sisaWbp" readonly style="background:#bbf7d0;text-align:center"></div></div>
+<div class="grid2" style="margin-top:8px"><div><label>JUMLAH NARAPIDANA</label><input id="totalNapi" value="0" style="text-align:center"></div><div><label>JUMLAH TAHANAN</label><input id="totalTahan" value="0" style="text-align:center"></div></div>
+</div>
+<div style="display:grid;grid-template-columns:1fr 1fr;gap:12px">
+<!-- IZIN KELUAR WBP - SUDAH DITAMBAH TOMBOL BEROBAT + KOLOM PENGAWAL -->
+<div class="section" style="border:3px solid #f59e0b"><div class="section-title">Izin Keluar WBP - Berobat + Pengawal</div>
+<label>Jumlah Izin (AUTO dari tombol +)</label><input id="jmlIzin" type="number" value="0" readonly style="background:#fde68a;text-align:center;font-weight:900;font-size:20px;border:3px solid #000">
+<div class="btn-add-bar"><span style="font-size:10px;font-weight:900">DATA BEROBAT - Bisa lebih dari 1</span><button type="button" class="btn-green" onclick="tambahBerobat()">+ Tambah Berobat</button></div>
+<div id="listBerobat"></div>
+<label style="margin-top:10px">Perihal (Otomatis dari RS)</label><textarea id="perihal" rows="2" style="background:#eff6ff;font-size:12px"></textarea>
+<label>Keterangan (Otomatis + Pengawal)</label><textarea id="ketIzin" rows="3" style="background:#fff;font-size:12px" placeholder="Otomatis terisi dari data berobat + pengawal"></textarea>
+</div>
+<div class="section"><div class="section-title">Kondisi Kamtib</div><label>Kondisi</label><select id="kondisi"><option>Aman dan Kondusif</option><option>Kondusif</option><option>Perlu Perhatian</option></select><label>Detail</label><textarea id="detail" rows="8">aman terkendali</textarea></div></div>
+</div>
+</div>
 <div class="section"><div class="section-title">📸 DOKUMENTASI</div><div class="foto-wrap"><div class="fbtns"><button class="fbtn cam" onclick="camInput.click()">📷 Kamera</button><button class="fbtn" onclick="galInput.click()">🖼️ Galeri</button></div><div style="font-size:11px;font-weight:700;margin-top:8px">Maks 4 foto - Masuk ke JPG</div><div class="preview" id="preview"></div></div></div>
-<button class="btn-download" onclick="downloadFix()">📥 DOWNLOAD JADI GAMBAR (JPG)</button></div></div>
+<button class="btn-download" onclick="downloadFix()">📥 DOWNLOAD JADI GAMBAR (JPG)</button>
+</div>
+</div>
+
 <div id="areaCetak">
 <div style="text-align:center;border-bottom:4px solid #f59e0b;padding-bottom:12px;margin-bottom:14px"><h1 style="font-size:28px;font-weight:900;color:#fff">LAPORAN KAMTIB</h1><p style="font-size:13px;color:#fff">LAPAS KELAS IIA PEKANBARU</p><div id="cetakTglJam" style="margin-top:6px;font-size:13px;font-weight:700;color:#fbbf24"></div></div>
-<div style="display:grid;grid-template-columns:280px 1fr;gap:14px"><div><div class="cetak-box"><h3>Tanggal & Jam</h3><div class="cetak-field"><label>Tanggal</label><div class="val" id="c-tgl"></div></div><div class="cetak-field"><label>Jam</label><div class="val" id="c-jam"></div></div></div><div class="cetak-box"><h3>Petugas Jaga</h3><div class="cetak-field"><label>Komandan</label><div class="val" id="c-komandan"></div></div><div class="cetak-field"><label>Wakil</label><div class="val" id="c-wakil"></div></div><div class="cetak-field"><label>Regu</label><div class="val" id="c-regu"></div></div><div style="display:grid;grid-template-columns:1fr 1fr;gap:6px"><div class="cetak-field"><label>Hadir</label><div class="val" id="c-hadir"></div></div><div class="cetak-field"><label>Tidak Hadir</label><div class="val" id="c-tidak"></div></div></div></div><div class="cetak-box"><h3>Izin Keluar</h3><div class="cetak-field"><label>Jumlah</label><div class="val" id="c-jmlIzin"></div></div><div class="cetak-field"><label>Perihal</label><div class="val" id="c-perihal"></div></div><div class="cetak-field"><label>Keterangan</label><div class="val" id="c-ketIzin"></div></div><div class="cetak-field"><label>Sisa</label><div class="val" id="c-sisa" style="background:#bbf7d0"></div></div></div></div><div><div class="cetak-box"><h3>Isi Hunian Per Blok (A-F + TIPIKOR + BPN)</h3><div class="cetak-blok"><div class="cetak-field"><label>BLOK A</label><div class="val" id="c-blokA"></div></div><div class="cetak-field"><label>BLOK B</label><div class="val" id="c-blokB"></div></div><div class="cetak-field"><label>BLOK C</label><div class="val" id="c-blokC"></div></div><div class="cetak-field"><label>BLOK D</label><div class="val" id="c-blokD"></div></div><div class="cetak-field"><label>BLOK E</label><div class="val" id="c-blokE"></div></div><div class="cetak-field"><label>BLOK F</label><div class="val" id="c-blokF"></div></div><div class="cetak-field"><label>BLOK TIPIKOR</label><div class="val" id="c-blokTIPIKOR"></div></div><div class="cetak-field"><label>BLOK BPN</label><div class="val" id="c-blokBPN"></div></div></div><div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:6px;margin-top:8px"><div class="cetak-field"><label>JUMLAH WBP</label><div class="val" id="c-total" style="background:#fde68a"></div></div><div class="cetak-field"><label>NARAPIDANA</label><div class="val" id="c-napi"></div></div><div class="cetak-field"><label>TAHANAN</label><div class="val" id="c-tahan"></div></div></div></div><div class="cetak-box"><h3>Kondisi Kamtib</h3><div class="cetak-field"><label>Kondisi</label><div class="val" id="c-kondisi"></div></div><div class="cetak-field"><label>Detail</label><div class="val" id="c-detail" style="min-height:60px"></div></div></div><div class="cetak-box"><h3>📸 DOKUMENTASI</h3><div class="cetak-foto" id="c-foto"></div></div></div></div></div>
+<div style="display:grid;grid-template-columns:280px 1fr;gap:14px">
+<div><div class="cetak-box"><h3>Tanggal & Jam</h3><div class="cetak-field"><label>Tanggal</label><div class="val" id="c-tgl"></div></div><div class="cetak-field"><label>Jam</label><div class="val" id="c-jam"></div></div></div><div class="cetak-box"><h3>Petugas Jaga</h3><div class="cetak-field"><label>Komandan</label><div class="val" id="c-komandan"></div></div><div class="cetak-field"><label>Wakil</label><div class="val" id="c-wakil"></div></div><div class="cetak-field"><label>Regu</label><div class="val" id="c-regu"></div></div><div style="display:grid;grid-template-columns:1fr 1fr;gap:6px"><div class="cetak-field"><label>Hadir</label><div class="val" id="c-hadir"></div></div><div class="cetak-field"><label>Tidak Hadir</label><div class="val" id="c-tidak"></div></div></div></div><div class="cetak-box"><h3>Izin Keluar + Pengawal</h3><div class="cetak-field"><label>Jumlah</label><div class="val" id="c-jmlIzin"></div></div><div class="cetak-field"><label>Perihal</label><div class="val" id="c-perihal"></div></div><div class="cetak-field"><label>Keterangan + Pengawal</label><div class="val" id="c-ketIzin" style="min-height:80px"></div></div><div class="cetak-field"><label>Sisa</label><div class="val" id="c-sisa" style="background:#bbf7d0"></div></div></div></div>
+<div><div class="cetak-box"><h3>Isi Hunian Per Blok (A-F + TIPIKOR + BPN)</h3><div class="cetak-blok"><div class="cetak-field"><label>BLOK A</label><div class="val" id="c-blokA"></div></div><div class="cetak-field"><label>BLOK B</label><div class="val" id="c-blokB"></div></div><div class="cetak-field"><label>BLOK C</label><div class="val" id="c-blokC"></div></div><div class="cetak-field"><label>BLOK D</label><div class="val" id="c-blokD"></div></div><div class="cetak-field"><label>BLOK E</label><div class="val" id="c-blokE"></div></div><div class="cetak-field"><label>BLOK F</label><div class="val" id="c-blokF"></div></div><div class="cetak-field"><label>BLOK TIPIKOR</label><div class="val" id="c-blokTIPIKOR"></div></div><div class="cetak-field"><label>BLOK BPN</label><div class="val" id="c-blokBPN"></div></div></div><div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:6px;margin-top:8px"><div class="cetak-field"><label>JUMLAH WBP</label><div class="val" id="c-total" style="background:#fde68a"></div></div><div class="cetak-field"><label>NARAPIDANA</label><div class="val" id="c-napi"></div></div><div class="cetak-field"><label>TAHANAN</label><div class="val" id="c-tahan"></div></div></div></div><div class="cetak-box"><h3>Kondisi Kamtib</h3><div class="cetak-field"><label>Kondisi</label><div class="val" id="c-kondisi"></div></div><div class="cetak-field"><label>Detail</label><div class="val" id="c-detail" style="min-height:60px"></div></div></div><div class="cetak-box"><h3>📸 DOKUMENTASI</h3><div class="cetak-foto" id="c-foto"></div></div></div>
+</div>
+</div>
+
 <input type="file" id="camInput" accept="image/*" capture="environment" multiple hidden>
 <input type="file" id="galInput" accept="image/*" multiple hidden>
 <script>
-let files=[], fileURLs=[];const preview=document.getElementById('preview');
+let files=[], fileURLs=[];
+const preview=document.getElementById('preview');
 function addFiles(l){const arr=Array.from(l).slice(0,4-files.length);arr.forEach(f=>{files.push(f);fileURLs.push(URL.createObjectURL(f));});render();}
 function render(){preview.innerHTML='';fileURLs.forEach((url,i)=>{const d=document.createElement('div');d.className='item';d.innerHTML=`<img src="${url}"><div class="del">×</div>`;d.querySelector('.del').onclick=()=>{files.splice(i,1);fileURLs.splice(i,1);render();};preview.appendChild(d);});}
-camInput.addEventListener('change',e=>addFiles(e.target.files));galInput.addEventListener('change',e=>addFiles(e.target.files));
+camInput.addEventListener('change',e=>addFiles(e.target.files));
+galInput.addEventListener('change',e=>addFiles(e.target.files));
 function hitung(){let t=0;document.querySelectorAll('.blok').forEach(el=>t+=parseInt(el.value)||0);document.getElementById('total').value=t;updateSisa();}
 document.querySelectorAll('.blok').forEach(el=>el.addEventListener('input',hitung));
 function updateSisa(){let tot=parseInt(document.getElementById('total').value)||0;let izin=parseInt(document.getElementById('jmlIzin').value)||0;document.getElementById('sisaWbp').value=tot-izin;}
-document.getElementById('jmlIzin').addEventListener('input',updateSisa);
+// === TAMBAHAN BEROBAT + PENGAWAL - PATEN ===
+let noBerobat=0;
+function tambahBerobat(){
+ noBerobat++;
+ const list=document.getElementById('listBerobat');
+ const div=document.createElement('div');
+ div.className='berobat-item';
+ div.id='berobat'+noBerobat;
+ div.innerHTML=`
+  <div style="display:flex;justify-content:space-between;align-items:center"><b style="font-size:11px">🩺 BEROBAT #${noBerobat}</b><button type="button" class="btn-red" onclick="hapusBerobat(${noBerobat})">Hapus</button></div>
+  <label>Nama / Blok WBP</label><input class="nm" type="text" placeholder="Contoh: Blok C 2 org" oninput="syncBerobat()">
+  <label>Tujuan RS</label>
+  <select class="rs" onchange="syncBerobat()">
+   <option>Berobat - RSUD</option>
+   <option selected>Berobat - RSUD Arifin Achmad</option>
+   <option>Berobat - RS Bhayangkara</option>
+   <option>Berobat - RS Awal Bros Pekanbaru</option>
+   <option>Berobat - RS Petala Bumi</option>
+   <option>Berobat - RS Sansani</option>
+   <option>Berobat - RS Lainnya</option>
+   <option>Sidang PN</option>
+   <option>Lainnya</option>
+  </select>
+  <label>Pengawalnya Siapa Aja (Kolom Pengawal)</label><input class="kw" type="text" placeholder="Contoh: Andi, Budi, Joko + TNI/Polri" oninput="syncBerobat()">
+ `;
+ list.appendChild(div);
+ syncBerobat();
+}
+function hapusBerobat(id){document.getElementById('berobat'+id)?.remove();syncBerobat();}
+function syncBerobat(){
+ const items=document.querySelectorAll('.berobat-item');
+ document.getElementById('jmlIzin').value=items.length;
+ let perihal=[]; let ket=[];
+ items.forEach(b=>{
+  let nm=b.querySelector('.nm')?.value||'WBP';
+  let rs=b.querySelector('.rs')?.value||'';
+  let kw=b.querySelector('.kw')?.value||'';
+  if(rs) perihal.push(rs);
+  let txt=nm+' '+rs;
+  if(kw) txt+=' (Kawal: '+kw+')';
+  ket.push(txt);
+ });
+ document.getElementById('perihal').value=perihal.join(', ');
+ document.getElementById('ketIzin').value=ket.join(' ; ');
+ updateSisa();
+}
+
 function downloadFix(){
-  document.getElementById('c-tgl').innerText=document.getElementById('tgl').value;document.getElementById('c-jam').innerText=document.getElementById('jam').value;
-  document.getElementById('c-komandan').innerText=document.getElementById('komandan').value;document.getElementById('c-wakil').innerText=document.getElementById('wakil').value;
-  document.getElementById('c-regu').innerText=document.getElementById('regu').value;document.getElementById('c-hadir').innerText=document.getElementById('hadir').value;
-  document.getElementById('c-tidak').innerText=document.getElementById('tidak').value;document.getElementById('c-blokA').innerText=document.getElementById('blokA').value||'0';
-  document.getElementById('c-blokB').innerText=document.getElementById('blokB').value||'0';document.getElementById('c-blokC').innerText=document.getElementById('blokC').value||'0';
-  document.getElementById('c-blokD').innerText=document.getElementById('blokD').value||'0';document.getElementById('c-blokE').innerText=document.getElementById('blokE').value||'0';
-  document.getElementById('c-blokF').innerText=document.getElementById('blokF').value||'0';document.getElementById('c-blokTIPIKOR').innerText=document.getElementById('blokTIPIKOR').value||'0';
-  document.getElementById('c-blokBPN').innerText=document.getElementById('blokBPN').value||'0';document.getElementById('c-total').innerText=document.getElementById('total').value;
-  document.getElementById('c-napi').innerText=document.getElementById('totalNapi').value;document.getElementById('c-tahan').innerText=document.getElementById('totalTahan').value;
-  document.getElementById('c-jmlIzin').innerText=document.getElementById('jmlIzin').value;document.getElementById('c-perihal').innerText=document.getElementById('perihal').value;
-  document.getElementById('c-ketIzin').innerText=document.getElementById('ketIzin').value||'-';document.getElementById('c-sisa').innerText=document.getElementById('sisaWbp').value;
-  document.getElementById('c-kondisi').innerText=document.getElementById('kondisi').value;document.getElementById('c-detail').innerText=document.getElementById('detail').value;
+  document.getElementById('c-tgl').innerText=document.getElementById('tgl').value;
+  document.getElementById('c-jam').innerText=document.getElementById('jam').value;
+  document.getElementById('c-komandan').innerText=document.getElementById('komandan').value;
+  document.getElementById('c-wakil').innerText=document.getElementById('wakil').value;
+  document.getElementById('c-regu').innerText=document.getElementById('regu').value;
+  document.getElementById('c-hadir').innerText=document.getElementById('hadir').value;
+  document.getElementById('c-tidak').innerText=document.getElementById('tidak').value;
+  document.getElementById('c-blokA').innerText=document.getElementById('blokA').value||'0';
+  document.getElementById('c-blokB').innerText=document.getElementById('blokB').value||'0';
+  document.getElementById('c-blokC').innerText=document.getElementById('blokC').value||'0';
+  document.getElementById('c-blokD').innerText=document.getElementById('blokD').value||'0';
+  document.getElementById('c-blokE').innerText=document.getElementById('blokE').value||'0';
+  document.getElementById('c-blokF').innerText=document.getElementById('blokF').value||'0';
+  document.getElementById('c-blokTIPIKOR').innerText=document.getElementById('blokTIPIKOR').value||'0';
+  document.getElementById('c-blokBPN').innerText=document.getElementById('blokBPN').value||'0';
+  document.getElementById('c-total').innerText=document.getElementById('total').value;
+  document.getElementById('c-napi').innerText=document.getElementById('totalNapi').value;
+  document.getElementById('c-tahan').innerText=document.getElementById('totalTahan').value;
+  document.getElementById('c-jmlIzin').innerText=document.getElementById('jmlIzin').value;
+  document.getElementById('c-perihal').innerText=document.getElementById('perihal').value;
+  document.getElementById('c-ketIzin').innerText=document.getElementById('ketIzin').value||'-';
+  document.getElementById('c-sisa').innerText=document.getElementById('sisaWbp').value;
+  document.getElementById('c-kondisi').innerText=document.getElementById('kondisi').value;
+  document.getElementById('c-detail').innerText=document.getElementById('detail').value;
   document.getElementById('cetakTglJam').innerText=document.getElementById('jamLive').innerText;
   const cFoto=document.getElementById('c-foto');cFoto.innerHTML='';fileURLs.forEach(url=>{const img=document.createElement('img');img.src=url;cFoto.appendChild(img);});
   if(fileURLs.length===0){cFoto.innerHTML='<div style="color:#fff;font-size:12px;padding:20px;text-align:center;border:2px dashed #fff;border-radius:8px;width:100%">Tidak ada foto</div>';}
-  const area=document.getElementById('areaCetak');area.style.position='static';area.style.left='0';const btn=document.querySelector('.btn-download');btn.innerText='⏳ Membuat Gambar...';
-  setTimeout(()=>{html2canvas(area,{scale:2,useCORS:true,backgroundColor:'#0f1e3d',width:1200,windowWidth:1200}).then(canvas=>{const a=document.createElement('a');a.download=`Laporan-Kamtib-${new Date().toISOString().slice(0,10)}.jpg`;a.href=canvas.toDataURL('image/jpeg',0.92);a.click();area.style.position='absolute';area.style.left='-9999px';btn.innerText='📥 DOWNLOAD JADI GAMBAR (JPG)';});},600);}
+  const area=document.getElementById('areaCetak');area.style.position='static';area.style.left='0';
+  const btn=document.querySelector('.btn-download');btn.innerText='⏳ Membuat Gambar...';
+  setTimeout(()=>{html2canvas(area,{scale:2,useCORS:true,backgroundColor:'#0f1e3d',width:1200,windowWidth:1200}).then(canvas=>{const a=document.createElement('a');a.download=`Laporan-Kamtib-${new Date().toISOString().slice(0,10)}.jpg`;a.href=canvas.toDataURL('image/jpeg',0.92);a.click();area.style.position='absolute';area.style.left='-9999px';btn.innerText='📥 DOWNLOAD JADI GAMBAR (JPG)';});},600);
+}
 hitung();
-function updateJamWIB(){const now=new Date();const jakarta=new Date(now.toLocaleString('en-US',{timeZone:'Asia/Jakarta'}));const yyyy=jakarta.getFullYear();const mm=String(jakarta.getMonth()+1).padStart(2,'0');const dd=String(jakarta.getDate()).padStart(2,'0');const hh=String(jakarta.getHours()).padStart(2,'0');const mi=String(jakarta.getMinutes()).padStart(2,'0');const ss=String(jakarta.getSeconds()).padStart(2,'0');document.getElementById('tgl').value=`${yyyy}-${mm}-${dd}`;document.getElementById('jam').value=`${hh}:${mi}:${ss}`;const tglStr=jakarta.toLocaleDateString('id-ID',{weekday:'long',day:'2-digit',month:'long',year:'numeric'});document.getElementById('jamLive').textContent=`${tglStr} | ${hh}:${mi}:${ss} WIB`;}
+function updateJamWIB(){
+  const now=new Date();const jakarta=new Date(now.toLocaleString('en-US',{timeZone:'Asia/Jakarta'}));
+  const yyyy=jakarta.getFullYear();const mm=String(jakarta.getMonth()+1).padStart(2,'0');const dd=String(jakarta.getDate()).padStart(2,'0');
+  const hh=String(jakarta.getHours()).padStart(2,'0');const mi=String(jakarta.getMinutes()).padStart(2,'0');const ss=String(jakarta.getSeconds()).padStart(2,'0');
+  document.getElementById('tgl').value=`${yyyy}-${mm}-${dd}`;document.getElementById('jam').value=`${hh}:${mi}:${ss}`;
+  const tglStr=jakarta.toLocaleDateString('id-ID',{weekday:'long',day:'2-digit',month:'long',year:'numeric'});
+  document.getElementById('jamLive').textContent=`${tglStr} | ${hh}:${mi}:${ss} WIB`;
+}
 setInterval(updateJamWIB,1000);updateJamWIB();
-</script></body></html>
+tambahBerobat(); // auto 1 baris pertama
+</script>
+</body>
+</html>
