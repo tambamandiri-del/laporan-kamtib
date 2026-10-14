@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-<title>Laporan Kamtib HD - Lapas Pekanbaru</title>
+<title>Laporan Kamtib Lapas Pekanbaru</title>
 <link rel="manifest" href="manifest.json">
 <meta name="theme-color" content="#0a1931">
 <meta name="apple-mobile-web-app-capable" content="yes">
@@ -29,11 +29,11 @@ button{border:none;padding:14px;font-weight:bold;border-radius:8px;font-size:15p
 </style>
 </head>
 <body>
-<h2>LAPORAN KAMTIB - HEADER ATAS + BAWAH - HD</h2>
+<h2>LAPORAN KAMTIB</h2>
 <div id="placeholder">📸 Belum ada foto<br><small style="color:white">Klik "BUKA KAMERA"</small></div>
 <div id="canvasWrap"><canvas id="preview"></canvas></div>
 <div class="controls">
-<div id="qualityInfo">✅ Versi Final: Ada KOP ATAS + BAWAH, foto gak kosong lagi!</div>
+<div id="qualityInfo">PASTI BERMANFAAT UNTUK MASYARAKAT</div>
 <label>📸 Foto Kegiatan:</label>
 <button id="btnKamera" onclick="document.getElementById('fotoInput').click()">📷 BUKA KAMERA</button>
 <input type="file" id="fotoInput" accept="image/*" capture="environment">
@@ -48,8 +48,8 @@ button{border:none;padding:14px;font-weight:bold;border-radius:8px;font-size:15p
 <option>Lapas Pekanbaru - Umum</option>
 </select>
 <label>📝 Uraian:</label><input type="text" id="uraian" value="Lagi kerja">
-<button id="btnDownloadJPG" onclick="downloadHD('jpg')">⬇️ DOWNLOAD HD JPG</button>
-<button id="btnDownloadPNG" onclick="downloadHD('png')">⬇️ DOWNLOAD SUPER HD PNG</button>
+<button id="btnDownloadJPG" onclick="downloadHD('jpg')">⬇️ DOWNLOAD PICTURE</button>
+<button id="btnDownloadPNG" onclick="downloadHD('png')">⬇️ DOWNLOAD HD</button>
 </div>
 <script>
 const canvas=document.getElementById('preview');const ctx=canvas.getContext('2d');
