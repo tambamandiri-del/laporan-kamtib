@@ -1,27 +1,27 @@
 {
-  "name": "Laporan Kamtib Lapas Pekanbaru",
+  "name": "Laporan Kamtib Lapas Pekanbaru - Header",
   "short_name": "Kamtib Lapas",
-  "description": "Aplikasi Laporan Kamtib Lapas Pekanbaru - Super HD",
-  "start_url": "./iphone-v2.html?v=hd6",
+  "description": "Aplikasi Laporan Kamtib Lapas Pekanbaru - Header Atas Bawah HD",
+  "start_url": "./iphone-v2.html?v=header7",
   "display": "standalone",
   "background_color": "#0a1931",
   "theme_color": "#0a1931",
   "orientation": "portrait",
   "icons": [
     {
-      "src": "icon-512.png",
+      "src": "icon-512.png?v=header7",
       "sizes": "512x512",
       "type": "image/png",
       "purpose": "any maskable"
     },
     {
-      "src": "icon-192.png",
+      "src": "icon-192.png?v=header7",
       "sizes": "192x192",
       "type": "image/png",
       "purpose": "any"
     },
     {
-      "src": "icon-180.png",
+      "src": "icon-180.png?v=header7",
       "sizes": "180x180",
       "type": "image/png",
       "purpose": "any"
