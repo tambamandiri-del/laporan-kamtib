@@ -3,15 +3,12 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-<title>Laporan Kamtib  - Lapas Pekanbaru</title>
-<link rel="manifest" href="manifest.json?v=hd6">
+<title>Laporan Kamtib HD - Lapas Pekanbaru</title>
+<link rel="manifest" href="manifest.json">
 <meta name="theme-color" content="#0a1931">
 <meta name="apple-mobile-web-app-capable" content="yes">
-<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="apple-mobile-web-app-title" content="Kamtib Lapas">
-<link rel="apple-touch-icon" href="icon-180.png?v=hd6">
-<link rel="icon" type="image/png" sizes="512x512" href="icon-512.png?v=hd6">
-<link rel="icon" type="image/png" sizes="192x192" href="icon-192.png?v=hd6">
+<link rel="apple-touch-icon" href="icon-180.png">
 <style>
 *{margin:0;padding:0;box-sizing:border-box}
 body{background:#0a1931;font-family:Arial,sans-serif;padding:10px}
@@ -32,11 +29,11 @@ button{border:none;padding:14px;font-weight:bold;border-radius:8px;font-size:15p
 </style>
 </head>
 <body>
-<h2>LAPORAN KAMTIB</h2>
+<h2>LAPORAN KAMTIB - HEADER ATAS + BAWAH - HD</h2>
 <div id="placeholder">📸 Belum ada foto<br><small style="color:white">Klik "BUKA KAMERA"</small></div>
 <div id="canvasWrap"><canvas id="preview"></canvas></div>
 <div class="controls">
-<div id="qualityInfo"></div>
+<div id="qualityInfo">✅ Versi Final: Ada KOP ATAS + BAWAH, foto gak kosong lagi!</div>
 <label>📸 Foto Kegiatan:</label>
 <button id="btnKamera" onclick="document.getElementById('fotoInput').click()">📷 BUKA KAMERA</button>
 <input type="file" id="fotoInput" accept="image/*" capture="environment">
@@ -50,9 +47,9 @@ button{border:none;padding:14px;font-weight:bold;border-radius:8px;font-size:15p
 <option>Area Steril</option><option>Area Brandgang</option><option>Dapur Lapas</option><option>Klinik Lapas</option><option>Aula Lapas</option><option>Lapangan Lapas</option><option>Masjid At-Taubah</option><option>Gereja Lapas</option><option>Ruang Kunjungan</option><option>Ruang KPLP</option><option>Ruang Kamtib</option>
 <option>Lapas Pekanbaru - Umum</option>
 </select>
-<label>📝 Uraian:</label><input type="text" id="uraian" value="Kegiatan perawatan senjata api">
-<button id="btnDownloadJPG" onclick="downloadHD('jpg')">⬇️ DOWNLOAD</button>
-<button id="btnDownloadPNG" onclick="downloadHD('png')">⬇️ DOWNLOAD HD </button>
+<label>📝 Uraian:</label><input type="text" id="uraian" value="Lagi kerja">
+<button id="btnDownloadJPG" onclick="downloadHD('jpg')">⬇️ DOWNLOAD HD JPG</button>
+<button id="btnDownloadPNG" onclick="downloadHD('png')">⬇️ DOWNLOAD SUPER HD PNG</button>
 </div>
 <script>
 const canvas=document.getElementById('preview');const ctx=canvas.getContext('2d');
@@ -71,69 +68,88 @@ fotoInput.addEventListener('change',(e)=>{
     };img.src=ev.target.result;
   };reader.readAsDataURL(file);
 });
+
 function draw(){
 if(!img)return;
-// PAKAI RESOLUSI ASLI - TIDAK DIKECILKAN! BIAR HD
-const baseW = Math.max(img.width, 2160); // MINIMAL 2160px (4K) - SUPER HD
+// RESOLUSI HD
+const baseW = Math.max(img.width, 2160);
 const imgAspect=img.width/img.height;
 let fotoH=baseW/imgAspect;
-// Jangan batasi 800 lagi, pakai tinggi asli biar gak blur
-const textH=Math.floor(baseW*0.185); // proporsional
-canvas.width=baseW;canvas.height=fotoH+textH;
+const headerH = Math.floor(baseW*0.14); // HEADER ATAS
+const footerH = Math.floor(baseW*0.18); // FOOTER BAWAH
+canvas.width=baseW;canvas.height=headerH+fotoH+footerH;
 
-// HIGH QUALITY RENDERING
 ctx.imageSmoothingEnabled=true;
 ctx.imageSmoothingQuality='high';
 
-ctx.fillStyle="#000";ctx.fillRect(0,0,canvas.width,canvas.height);
-const z=zoom/100;const dw=baseW*z;const dh=fotoH*z;const ox=(baseW-dw)/2;const oy=(fotoH-dh)/2;
-ctx.drawImage(img,ox,oy,dw,dh);
+// BACKGROUND
+ctx.fillStyle="#0a1931";ctx.fillRect(0,0,baseW,headerH);
+ctx.fillStyle="#000";ctx.fillRect(0,headerH,baseW,fotoH);
+ctx.fillStyle="white";ctx.fillRect(0,headerH+fotoH,baseW,footerH);
 
-// TEKS PUTIH BAWAH
-ctx.fillStyle="white";ctx.fillRect(0,fotoH,baseW,textH);
-ctx.fillStyle="#ffcc00";ctx.fillRect(0,fotoH,baseW,Math.floor(baseW*0.006));
+// GARIS KUNING
+ctx.fillStyle="#ffcc00";
+ctx.fillRect(0,0,baseW,Math.floor(baseW*0.008));
+ctx.fillRect(0,headerH-Math.floor(baseW*0.008),baseW,Math.floor(baseW*0.008));
+ctx.fillRect(0,headerH+fotoH,baseW,Math.floor(baseW*0.008));
+ctx.fillRect(0,headerH+fotoH+footerH-Math.floor(baseW*0.008),baseW,Math.floor(baseW*0.008));
 
-const d=Math.floor(baseW*0.03);const k=Math.floor(baseW*0.01);
-const mx=d+k+35;const my=Math.floor(baseW*0.038);
-
-// FONT BESAR - PROPORSIONAL HD
-ctx.fillStyle="#0a1931";ctx.font=`bold ${Math.floor(baseW*0.024)}px Arial`;ctx.fillText("LAPORAN KAMTIB - LAPAS PEKANBARU",mx,fotoH+my);
-ctx.fillStyle="#0a1931";ctx.font=`bold ${Math.floor(baseW*0.017)}px Arial`;const now=new Date();
+// ===== HEADER ATAS =====
+const now=new Date();
 const tgl=now.toLocaleDateString('id-ID',{day:'2-digit',month:'short',year:'numeric'});
 const jam=now.toLocaleTimeString('id-ID',{hour:'2-digit',minute:'2-digit'})+" WIB";
-ctx.fillText("📅 "+tgl+" | 🕒 "+jam,mx,fotoH+my+Math.floor(baseW*0.03));
-const blok=document.getElementById('blok').value;const uraian=document.getElementById('uraian').value;
-ctx.fillStyle="#333";ctx.font=`bold ${Math.floor(baseW*0.016)}px Arial`;ctx.fillText("📍 "+blok,mx,fotoH+my+Math.floor(baseW*0.055));
-ctx.fillStyle="#555";ctx.font=`${Math.floor(baseW*0.014)}px Arial`;let txt=uraian;if(txt.length>90)txt=txt.substring(0,90)+"...";
-ctx.fillText(txt,mx,fotoH+my+Math.floor(baseW*0.078));
 
-const th=fotoH+textH;
-ctx.fillStyle="#0a1931";ctx.fillRect(0,0,baseW,d);ctx.fillRect(0,th-d,baseW,d);ctx.fillRect(0,0,d,th);ctx.fillRect(baseW-d,0,d,th);
-ctx.fillStyle="#ffcc00";ctx.fillRect(d,d,baseW-2*d,k);ctx.fillRect(d,th-d-k,baseW-2*d,k);ctx.fillRect(d,d,k,th-2*d);ctx.fillRect(baseW-d-k,d,k,th-2*d);
+// Logo KAMTIB
+ctx.fillStyle="#ffcc00";
+ctx.font=`bold ${Math.floor(baseW*0.032)}px Arial`;
+ctx.fillText("KAMTIB", Math.floor(baseW*0.03), Math.floor(baseW*0.06));
+
+// Garis vertikal
+ctx.fillRect(Math.floor(baseW*0.135), Math.floor(baseW*0.02), Math.floor(baseW*0.003), Math.floor(baseW*0.08));
+
+// Judul Kementerian
+ctx.font=`bold ${Math.floor(baseW*0.017)}px Arial`;
+ctx.fillText("KEMENTERIAN IMIGRASI DAN PEMASYARAKATAN", Math.floor(baseW*0.16), Math.floor(baseW*0.05));
+ctx.font=`bold ${Math.floor(baseW*0.019)}px Arial`;
+ctx.fillText("LAPAS KELAS IIA PEKANBARU", Math.floor(baseW*0.16), Math.floor(baseW*0.08));
+
+// Tanggal kanan atas
+ctx.fillStyle="white";
+ctx.font=`${Math.floor(baseW*0.013)}px Arial`;
+ctx.textAlign="right";
+ctx.fillText(tgl+" • "+jam, baseW-Math.floor(baseW*0.03), Math.floor(baseW*0.11));
+ctx.textAlign="left";
+
+// ===== FOTO TENGAH =====
+const z=zoom/100;const dw=baseW*z;const dh=fotoH*z;const ox=(baseW-dw)/2;const oy=headerH+(fotoH-dh)/2;
+ctx.drawImage(img,ox,oy,dw,dh);
+
+// FRAME FOTO
+const d=Math.floor(baseW*0.015);const k=Math.floor(baseW*0.006);
+ctx.fillStyle="#0a1931";ctx.fillRect(0,headerH,baseW,d);ctx.fillRect(0,headerH+fotoH-d,baseW,d);ctx.fillRect(0,headerH,d,fotoH);ctx.fillRect(baseW-d,headerH,d,fotoH);
+ctx.fillStyle="#ffcc00";ctx.fillRect(d,headerH+d,baseW-2*d,k);ctx.fillRect(d,headerH+fotoH-d-k,baseW-2*d,k);ctx.fillRect(d,headerH+d,k,fotoH-2*d);ctx.fillRect(baseW-d-k,headerH+d,k,fotoH-2*d);
+
+// ===== FOOTER BAWAH =====
+const mx=Math.floor(baseW*0.03);const my=headerH+fotoH+Math.floor(baseW*0.04);
+ctx.fillStyle="#0a1931";ctx.font=`bold ${Math.floor(baseW*0.022)}px Arial`;ctx.fillText("LAPORAN KAMTIB - LAPAS PEKANBARU",mx,my);
+ctx.fillStyle="#0a1931";ctx.font=`bold ${Math.floor(baseW*0.015)}px Arial`;ctx.fillText("📅 "+tgl+" | 🕒 "+jam,mx,my+Math.floor(baseW*0.03));
+const blok=document.getElementById('blok').value;const uraian=document.getElementById('uraian').value;
+ctx.fillStyle="#333";ctx.font=`bold ${Math.floor(baseW*0.014)}px Arial`;ctx.fillText("📍 "+blok,mx,my+Math.floor(baseW*0.055));
+ctx.fillStyle="#555";ctx.font=`${Math.floor(baseW*0.013)}px Arial`;let txt=uraian;if(txt.length>85)txt=txt.substring(0,85)+"...";
+ctx.fillText(txt,mx,my+Math.floor(baseW*0.075));
 }
+
 function downloadHD(format){
   if(!img){alert("Buka kamera dulu Bang!");return;}
   draw();
   if(format==='png'){
-    // PNG 100% LOSSLESS - PALING TAJAM, FILE GEDE
     canvas.toBlob(function(blob){
-      const url=URL.createObjectURL(blob);
-      const a=document.createElement('a');
-      a.href=url;
-      a.download="KAMTIB-SUPERHD-"+Date.now()+".png";
-      document.body.appendChild(a);a.click();
-      setTimeout(()=>{document.body.removeChild(a);URL.revokeObjectURL(url);},200);
+      const url=URL.createObjectURL(blob);const a=document.createElement('a');a.href=url;a.download="KAMTIB-HEADER-"+Date.now()+".png";document.body.appendChild(a);a.click();setTimeout(()=>{document.body.removeChild(a);URL.revokeObjectURL(url);},200);
     },'image/png');
   }else{
-    // JPG 100% QUALITY - TAJAM TAPI FILE LEBIH KECIL
     canvas.toBlob(function(blob){
-      const url=URL.createObjectURL(blob);
-      const a=document.createElement('a');
-      a.href=url;
-      a.download="KAMTIB-HD-"+Date.now()+".jpg";
-      document.body.appendChild(a);a.click();
-      setTimeout(()=>{document.body.removeChild(a);URL.revokeObjectURL(url);},200);
-    },'image/jpeg',1.0); // 1.0 = 100% QUALITY!
+      const url=URL.createObjectURL(blob);const a=document.createElement('a');a.href=url;a.download="KAMTIB-HEADER-"+Date.now()+".jpg";document.body.appendChild(a);a.click();setTimeout(()=>{document.body.removeChild(a);URL.revokeObjectURL(url);},200);
+    },'image/jpeg',1.0);
   }
 }
 </script>
