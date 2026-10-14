@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>LAPORAN KAMTIB - LOGO GARUDA AWAL</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box;font-family:-apple-system,Segoe UI,sans-serif}
+body{background:#0a0e1a;display:flex;justify-content:center}
+.phone{width:100%;max-width:390px;background:linear-gradient(180deg,#0f1e3d,#162a5a);min-height:100vh;padding:20px 16px}
+.garuda{display:flex;justify-content:center;margin:10px 0}
+.garuda img{width:92px;filter:drop-shadow(0 4px 12px gold);-webkit-filter:drop-shadow(0 4px 12px gold)}
+.title{text-align:center;margin-bottom:16px}
+.title h1{color:#fbbf24;font-size:20px;font-weight:900}
+.title p{color:#a5b4fc;font-size:12px;letter-spacing:2px}
+.time-card{background:rgba(255,255,255,0.06);border:1.5px solid rgba(251,191,36,0.3);border-radius:14px;padding:12px 14px;display:flex;justify-content:space-between;margin-bottom:18px}
+.clock{width:38px;height:38px;background:linear-gradient(135deg,#fbbf24,#f59e0b);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:20px}
+.time-left{display:flex;align-items:center;gap:10px}
+.time-left b{color:#fff;font-size:13px;display:block}
+.time-left span{color:#fbbf24;font-size:16px;font-weight:900}
+.time-right{background:rgba(16,185,129,0.15);border:1px solid rgba(16,185,129,0.4);color:#6ee7b7;font-size:10px;font-weight:800;padding:4px 10px;border-radius:20px}
+.label{color:#94a3b8;font-size:10px;font-weight:800;letter-spacing:2px;margin:0 0 10px 4px}
+.card{background:rgba(15,30,61,0.9);border:1.5px solid rgba(255,255,255,0.08);border-radius:16px;padding:14px;margin-bottom:14px}
+.group{margin-bottom:14px}
+.group label{color:#cbd5e1;font-size:11px;font-weight:700;margin-bottom:6px;display:block}
+.field{background:#fff;border-radius:10px;padding:11px 12px}
+.field input,.field select,.field textarea{background:transparent;border:none;outline:none;color:#000;font-size:13px;width:100%;font-weight:700}
+.field select option{background:#fff;color:#000}
+.btn-label{width:100%;border-radius:12px;padding:16px;color:#fff;font-weight:900;font-size:14px;display:block;text-align:center;margin-bottom:10px;cursor:pointer}
+.btn-blue{background:linear-gradient(135deg,#3b82f6,#1d4ed8)}
+.btn-green{background:linear-gradient(135deg,#10b981,#059669)}
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:10px}
+.item{background:#000;border-radius:10px;overflow:hidden;border:1.5px solid #fbbf24;position:relative}
+.item img{width:100%;height:140px;object-fit:cover;display:block}
+.item.info{background:#000;color:#fbbf24;font-size:7px;font-weight:700;padding:4px 6px;display:flex;justify-content:space-between}
+.item.del{position:absolute;top:4px;right:4px;background:#ef4444;color:#fff;width:22px;height:22px;border-radius:50%;display:flex;align-items:center;justify-content:center;cursor:pointer;font-weight:900;z-index:5}
+#canvasWM{display:none}
+.file-hidden{position:absolute;left:-9999px;opacity:0}
+#log{background:#000;color:#0f0;font-size:10px;padding:8px;border-radius:6px;margin-bottom:8px;display:none}
+</style>
+</head>
+<body>
+<div class="phone">
+<div class="garuda"><img src="https://upload.wikimedia.org/wikipedia/commons/9/90/National_emblem_of_Indonesia_Garuda_Pancasila.svg" alt="Garuda Pancasila" onerror="this.style.display='none';document.getElementById('garudaFallback').style.display='block'"><div id="garudaFallback" style="display:none;font-size:60px;filter:drop-shadow(0 4px 12px gold)">🦅</div></div>
+<div class="title"><h1>LAPORAN KAMTIB</h1><p>LAPAS PEKANBARU</p></div>
+<div class="time-card">
+<div class="time-left"><div class="clock">🕒</div><div><b>Waktu Laporan</b><span id="jamWIB">--:-- WIB</span></div></div>
+<div class="time-right" id="tglWIB">Loading</div>
+</div>
+<div class="label">Detail Laporan</div>
+<div class="card">
+<div class="group"><label>Tanggal Kejadian</label><div class="field"><input type="date" id="tglKejadian"></div></div>
+<div class="group"><label>Lokasi</label><div class="field"><select id="lokasi">
+<option>Blok A - Lapas Pekanbaru</option>
+<option>Blok B - Lapas Pekanbaru</option>
+<option>Blok C - Lapas Pekanbaru</option>
+<option>Blok D - Lapas Pekanbaru</option>
+<option>Blok E - Lapas Pekanbaru</option>
+<option>Blok F - Lapas Pekanbaru</option>
+<option>Blok BPN - Lapas Pekanbaru</option>
+<option>Blok Tipikor - Lapas Pekanbaru</option>
+</select></div></div>
+<div class="group"><label>Uraian Laporan</label><div class="field"><textarea id="uraian" rows="3" placeholder="Uraian kejadian..."></textarea></div></div>
+</div>
+<div class="label" style="text-align:center">Foto + Watermark Otomatis</div>
+<div class="card">
+<div id="log"></div>
+<canvas id="canvasWM"></canvas>
+<label for="fotoKamera" class="btn-label btn-blue">📷 TAP - BUKA KAMERA HP</label>
+<input type="file" id="fotoKamera" class="file-hidden" accept="image/*" capture="environment">
+<label for="fotoGaleri" class="btn-label btn-green">🖼️ TAP - PILIH GALERI</label>
+<input type="file" id="fotoGaleri" class="file-hidden" accept="image/*">
+<div class="grid" id="fotoGrid"></div>
+</div>
+</div>
+<script>
+function log(t){const el=document.getElementById('log');el.style.display='block';el.textContent=t;}
+function updateWIB(){
+const now=new Date();
+const jam=now.getHours().toString().padStart(2,'0')+':'+now.getMinutes().toString().padStart(2,'0')+' WIB';
+document.getElementById('jamWIB').textContent=jam;
+document.getElementById('tglWIB').textContent=now.toLocaleDateString('id-ID',{weekday:'long',day:'2-digit',month:'short',year:'numeric'});
+const yyyy=now.getFullYear();const mm=(now.getMonth()+1).toString().padStart(2,'0');const dd=now.getDate().toString().padStart(2,'0');
+if(!document.getElementById('tglKejadian').value) document.getElementById('tglKejadian').value=yyyy+'-'+mm+'-'+dd;
+}
+setInterval(updateWIB,1000);updateWIB();
+let fotos=[];
+function buatWatermark(file, cb){
+const reader=new FileReader();
+reader.onload=function(e){
+const img=new Image();
+img.onload=function(){
+const canvas=document.getElementById('canvasWM');const ctx=canvas.getContext('2d');
+let w=img.width,h=img.height;const maxW=1024;if(w>maxW){h=h*(maxW/w);w=maxW;}
+canvas.width=w;canvas.height=h;ctx.drawImage(img,0,0,w,h);
+const barH=h*0.20;ctx.fillStyle='rgba(0,0,0,0.78)';ctx.fillRect(0,h-barH,w,barH);
+ctx.fillStyle='#fbbf24';ctx.fillRect(0,h-barH,w,3);
+const lok=document.getElementById('lokasi').value;
+const now=new Date();const tglStr=now.toLocaleDateString('id-ID',{day:'2-digit',month:'short',year:'numeric'})+' '+now.toLocaleTimeString('id-ID',{hour:'2-digit',minute:'2-digit'})+' WIB';
+ctx.fillStyle='#fbbf24';ctx.font='bold '+(w*0.035)+'px Segoe UI';ctx.fillText('LAPORAN KAMTIB - LAPAS PEKANBARU',12,h-barH+24);
+ctx.fillStyle='#fff';ctx.font=(w*0.028)+'px Segoe UI';ctx.fillText('📍 '+lok,12,h-barH+48);ctx.fillText('🕒 '+tglStr,12,h-barH+68);
+cb(canvas.toDataURL('image/jpeg',0.85));
+};
+img.src=e.target.result;
+};
+reader.readAsDataURL(file);
+}
+function tambahFoto(f){
+log('⏳ Memproses watermark...');
+buatWatermark(f,function(wm){fotos.push({url:wm});render();log('✅ Berhasil! Foto watermark muncul!');});
+}
+document.getElementById('fotoKamera').addEventListener('change',e=>{const f=e.target.files[0];if(!f)return;tambahFoto(f);e.target.value='';});
+document.getElementById('fotoGaleri').addEventListener('change',e=>{const f=e.target.files[0];if(!f)return;tambahFoto(f);e.target.value='';});
+function render(){
+const grid=document.getElementById('fotoGrid');grid.innerHTML='';
+fotos.forEach(function(it,i){
+const div=document.createElement('div');div.className='item';
+div.innerHTML='<img src="'+it.url+'"><div class="del" onclick="fotos.splice('+i+',1);render()">×</div><div class="info"><span>✓ WATERMARK</span><span>LAPAS</span></div>';
+grid.appendChild(div);
+});
+}
+</script>
+</body>
+</html>
