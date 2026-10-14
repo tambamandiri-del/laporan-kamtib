@@ -2,27 +2,45 @@
 <html lang="id">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>LAPORAN KAMTIB</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>Laporan Kamtib Lapas</title>
+
+<!-- PWA - BISA INSTALL ANDROID & iOS -->
+<link rel="manifest" href="manifest.json">
+<meta name="theme-color" content="#0a1931">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="Kamtib Lapas">
+<link rel="apple-touch-icon" href="https://cdn-icons-png.flaticon.com/512/1041/1041916.png">
+
 <style>
 *{margin:0;padding:0;box-sizing:border-box}
-body{background:#0a1931;font-family:Arial,sans-serif;padding:10px}
+body{background:#0a1931;font-family:Arial,sans-serif;padding:10px; -webkit-tap-highlight-color: transparent;}
 h2{text-align:center;color:#ffcc00;font-size:16px;margin-bottom:8px}
 #canvasWrap{width:100%;max-width:500px;margin:0 auto;background:#000;border:3px solid #ffcc00;border-radius:8px;overflow:hidden;display:none}
 #preview{width:100%;display:block}
 .controls{max-width:500px;margin:10px auto;background:#122845;padding:12px;border-radius:8px;display:flex;flex-direction:column;gap:8px}
 label{color:#ffcc00;font-size:12px;font-weight:bold}
-input,select{padding:10px;border-radius:6px;border:none;font-size:14px}
-button{border:none;padding:14px;font-weight:bold;border-radius:8px;font-size:16px;cursor:pointer}
+input,select{padding:12px;border-radius:6px;border:none;font-size:16px}
+button{border:none;padding:16px;font-weight:bold;border-radius:8px;font-size:16px;cursor:pointer}
 #btnKamera{background:#00c853;color:white;width:100%;font-size:18px}
 #btnDownload{background:#ffcc00;color:#0a1931;width:100%;font-size:18px}
+#btnInstall{background:#2196F3;color:white;width:100%;display:none;margin-top:5px}
 .zoomRow{display:flex;gap:8px;align-items:center}
 #placeholder{max-width:500px;margin:0 auto;background:#122845;border:3px solid #ffcc00;border-radius:8px;padding:40px 20px;text-align:center;color:#ffcc00}
 #fotoInput{display:none}
+#infoInstall{background:#001a33;border:1px solid #ffcc00;color:#ffcc00;padding:10px;border-radius:6px;font-size:11px;text-align:center;max-width:500px;margin:10px auto}
 </style>
 </head>
 <body>
-<h2>LAPORAN KAMTIB<br>LAPAS KELAS IIA PEKANBARU</h2>
+<h2>LAPORAN KAMTIB<br>LAPAS PEKANBARU - APLIKASI</h2>
+
+<div id="infoInstall">
+📲 <b>CARA INSTALL JADI APLIKASI:</b><br>
+<b>Android:</b> Klik titik 3 di Chrome > "Install Aplikasi" / "Add to Home Screen"<br>
+<b>iPhone:</b> Klik Share ⬆️ > "Add to Home Screen"
+</div>
+
 <div id="placeholder">📸 Belum ada foto<br><small style="color:white">Klik "BUKA KAMERA"</small></div>
 <div id="canvasWrap"><canvas id="preview"></canvas></div>
 <div class="controls">
@@ -41,8 +59,32 @@ button{border:none;padding:14px;font-weight:bold;border-radius:8px;font-size:16p
 </select>
 <label>📝 Uraian:</label><input type="text" id="uraian" value="Kegiatan perawatan senjata api">
 <button id="btnDownload" onclick="download()">⬇️ DOWNLOAD LAPORAN</button>
+<button id="btnInstall">📲 INSTALL JADI APLIKASI</button>
 </div>
+
 <script>
+// DAFTAR SERVICE WORKER - BIAR BISA OFFLINE & INSTALL
+if ('serviceWorker' in navigator) {
+  navigator.serviceWorker.register('sw.js').then(()=>console.log("SW OK")).catch(e=>console.log("SW Fail",e));
+}
+
+// TOMBOL INSTALL ANDROID
+let deferredPrompt;
+const btnInstall=document.getElementById('btnInstall');
+window.addEventListener('beforeinstallprompt', (e) => {
+  e.preventDefault();
+  deferredPrompt = e;
+  btnInstall.style.display="block";
+});
+btnInstall.addEventListener('click', async () => {
+  if(!deferredPrompt) return;
+  deferredPrompt.prompt();
+  const { outcome } = await deferredPrompt.userChoice;
+  console.log(outcome);
+  deferredPrompt=null;
+  btnInstall.style.display="none";
+});
+
 const canvas=document.getElementById('preview');const ctx=canvas.getContext('2d');
 const canvasWrap=document.getElementById('canvasWrap');const placeholder=document.getElementById('placeholder');
 let img=null;let zoom=100;
@@ -66,10 +108,8 @@ const textH=200;canvas.width=baseW;canvas.height=fotoH+textH;
 ctx.fillStyle="#000";ctx.fillRect(0,0,canvas.width,canvas.height);
 const z=zoom/100;const dw=baseW*z;const dh=fotoH*z;const ox=(baseW-dw)/2;const oy=(fotoH-dh)/2;
 ctx.drawImage(img,ox,oy,dw,dh);
-// LATAR PUTIH BAWAH
 ctx.fillStyle="white";ctx.fillRect(0,fotoH,baseW,textH);
 ctx.fillStyle="#ffcc00";ctx.fillRect(0,fotoH,baseW,6);
-// TULISAN ANTI POTONG
 const d=Math.floor(baseW*0.03);const k=Math.floor(baseW*0.01);
 const mx=d+k+35;const my=42;
 ctx.fillStyle="#0a1931";ctx.font="bold 26px Arial";ctx.fillText("LAPORAN KAMTIB - LAPAS PEKANBARU",mx,fotoH+my);
@@ -81,7 +121,6 @@ const blok=document.getElementById('blok').value;const uraian=document.getElemen
 ctx.fillStyle="#333";ctx.font="bold 17px Arial";ctx.fillText("📍 "+blok,mx,fotoH+my+58);
 ctx.fillStyle="#555";ctx.font="15px Arial";let txt=uraian;if(txt.length>80)txt=txt.substring(0,80)+"...";
 ctx.fillText(txt,mx,fotoH+my+82);
-// GARIS PINGGIR FULL - BIRU DONGKER + KUNING
 const th=fotoH+textH;
 ctx.fillStyle="#0a1931";ctx.fillRect(0,0,baseW,d);ctx.fillRect(0,th-d,baseW,d);ctx.fillRect(0,0,d,th);ctx.fillRect(baseW-d,0,d,th);
 ctx.fillStyle="#ffcc00";ctx.fillRect(d,d,baseW-2*d,k);ctx.fillRect(d,th-d-k,baseW-2*d,k);ctx.fillRect(d,d,k,th-2*d);ctx.fillRect(baseW-d-k,d,k,th-2*d);
@@ -89,7 +128,6 @@ ctx.fillStyle="#ffcc00";ctx.fillRect(d,d,baseW-2*d,k);ctx.fillRect(d,th-d-k,base
 function download(){
   if(!img){alert("Buka kamera dulu Bang!");return;}
   draw();
-  // METODE AMAN AXIOO - pakai toBlob
   canvas.toBlob(function(blob){
     const url=URL.createObjectURL(blob);
     const a=document.createElement('a');
