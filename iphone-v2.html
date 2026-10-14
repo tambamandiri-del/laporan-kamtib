@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>LAPORAN KAMTIB V2 - RAJAWALI + DONGKER</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box;font-family:Arial,sans-serif}
+body{background:#081a35;color:white;padding:14px}
+.header{text-align:center;padding:12px 0}
+.title{color:#ffcc00;font-weight:900;font-size:22px;margin-top:8px}
+.subtitle{color:#7da8ff;font-size:11px;letter-spacing:3px}
+.card{background:rgba(255,255,255,0.07);border:1px solid rgba(255,255,255,0.15);border-radius:18px;padding:14px;margin-top:12px}
+.inp{background:white;color:#111;border-radius:11px;padding:13px;width:100%;border:none;font-weight:600;margin-top:6px}
+.cam-area{margin-top:12px;background:rgba(0,0,0,0.3);border:2px dashed #ffcc00;border-radius:16px;min-height:260px;display:flex;align-items:center;justify-content:center;flex-direction:column;overflow:hidden}
+.cam-btn{background:linear-gradient(135deg,#ffcc00,#ff9500);color:#000;border:none;border-radius:14px;padding:18px 24px;font-weight:900;font-size:16px;width:90%}
+.result-img{width:100%;border-radius:12px;display:block}
+.btn{flex:1;border:none;border-radius:12px;padding:14px;font-weight:800}
+.btn-down{background:#ffcc00;color:#000}
+.btn-re{background:rgba(255,255,255,0.15);color:white;border:1px solid rgba(255,255,255,0.3)}
+</style>
+</head>
+<body>
+<div class="header">
+<img src="rajawali.png" style="width:95px;margin:0 auto;display:block;border-radius:12px">
+<div class="title">LAPORAN KAMTIB V2</div>
+<div class="subtitle">LAPAS PEKANBARU - RAJAWALI + DONGKER</div>
+</div>
+<div class="card">
+<div style="display:flex;justify-content:space-between;align-items:center;background:rgba(0,0,0,0.4);border-radius:28px;padding:10px 14px;border:1px solid rgba(255,204,0,0.3)">
+<div style="display:flex;align-items:center;gap:10px"><div style="width:36px;height:36px;background:linear-gradient(135deg,#ffbf00,#ff7a00);border-radius:50%;display:flex;align-items:center;justify-content:center">🕒</div><div><div style="font-size:11px;color:#bbb">Waktu Laporan</div><div style="font-size:15px;font-weight:800;color:#ffcc00" id="jam">--:-- WIB</div></div></div>
+<div style="background:rgba(0,255,180,0.12);color:#5affd0;border-radius:20px;padding:6px 12px;font-size:11px;font-weight:700" id="hari">--</div>
+</div>
+<div style="margin-top:14px"><div style="font-size:12px;color:#aabdd8">Tanggal Kejadian</div><input class="inp" id="tgl" value="14 Okt 2026"></div>
+<div style="margin-top:10px"><div style="font-size:12px;color:#aabdd8">Lokasi</div><select class="inp" id="lokasi"><option>Blok A - Lapas Pekanbaru</option><option>Blok B</option><option>Blok C</option><option>Blok D</option><option>P2U - Pintu Utama</option><option>Lainnya</option></select></div>
+<div style="margin-top:10px"><div style="font-size:12px;color:#aabdd8">Uraian Laporan</div><textarea class="inp" id="uraian" style="height:75px;resize:none">Kegiatan pengamanan dan monitoring Kamtib dalam keadaan aman dan kondusif. Foto APAR terpasang.</textarea></div>
+<div style="font-size:11px;color:#8fa3c7;font-weight:800;margin:14px 0 8px">FOTO + WATERMARK RAJAWALI + DONGKER KIRI</div>
+<div class="cam-area" id="camArea">
+<div id="placeholder" style="text-align:center;padding:24px"><div style="font-size:48px">📸</div><div style="font-size:13px;color:#9ab0d0;margin:12px 0">Foto langsung jadi 1 foto besar<br><b style="color:#ffcc00">Rajawali di atas + Dongker di kiri + Watermark bawah</b></div><button class="cam-btn" onclick="document.getElementById('fileInput').click()">TAP - BUKA KAMERA HP</button></div>
+<div id="resultWrap" style="display:none;width:100%"><img id="hasilImg" class="result-img"></div>
+</div>
+<div id="okMsg" style="display:none;background:rgba(0,255,120,0.15);color:#3cffa0;border-radius:10px;padding:10px;margin-top:12px;text-align:center;font-weight:700">✅ BERHASIL! Rajawali + Dongker muncul!</div>
+<div id="actionRow" style="display:none;gap:10px;margin-top:12px"><button class="btn btn-down" onclick="downloadFoto()">⬇️ DOWNLOAD</button><button class="btn btn-re" onclick="ulangFoto()">🔄 FOTO ULANG</button></div>
+</div>
+<input type="file" id="fileInput" accept="image/*" capture="environment" style="display:none">
+<img id="logoRajawali" style="display:none" src="rajawali.png" crossorigin="anonymous">
+<script>
+function updateJam(){const n=new Date();const j=n.toLocaleTimeString('id-ID',{hour:'2-digit',minute:'2-digit'})+' WIB';const h=n.toLocaleDateString('id-ID',{weekday:'long',day:'numeric',month:'short',year:'numeric'});document.getElementById('jam').textContent=j;document.getElementById('hari').textContent=h;return{jamStr:j,hariStr:h}}
+updateJam();setInterval(updateJam,60000);
+let lastDataUrl=null;
+document.getElementById('fileInput').addEventListener('change',function(e){
+const file=e.target.files[0];if(!file)return;
+const tgl=document.getElementById('tgl').value;const lokasi=document.getElementById('lokasi').value;const uraian=document.getElementById('uraian').value;
+const r=updateJam();const jamStr=r.jamStr;const hariStr=r.hariStr;
+const reader=new FileReader();reader.onload=function(ev){
+const img=new Image();img.onload=function(){
+const canvas=document.createElement('canvas');const ctx=canvas.getContext('2d');
+canvas.width=img.width;canvas.height=img.height;const h=canvas.height,w=canvas.width;
+ctx.drawImage(img,0,0);
+const dongkerW=Math.floor(w*0.038);ctx.fillStyle='#0a1931';ctx.fillRect(0,0,dongkerW,h);
+ctx.fillStyle='#ffcc00';ctx.fillRect(dongkerW,0,Math.floor(w*0.014),h);
+const logo=document.getElementById('logoRajawali');
+const logoW=Math.floor(w*0.52);const logoH=Math.floor(h*0.34);const cx=(w-logoW)/2;const cy=Math.floor(h*0.02);
+ctx.save();ctx.fillStyle='white';const rad=Math.floor(w*0.04);
+ctx.beginPath();ctx.moveTo(cx+rad,cy);ctx.lineTo(cx+logoW-rad,cy);ctx.quadraticCurveTo(cx+logoW,cy,cx+logoW,cy+rad);ctx.lineTo(cx+logoW,cy+logoH-rad);ctx.quadraticCurveTo(cx+logoW,cy+logoH,cx+logoW-rad,cy+logoH);ctx.lineTo(cx+rad,cy+logoH);ctx.quadraticCurveTo(cx,cy+logoH,cx,cy+logoH-rad);ctx.lineTo(cx,cy+rad);ctx.quadraticCurveTo(cx,cy,cx+rad,cy);ctx.closePath();ctx.fill();ctx.restore();
+const aspect=logo.width/logo.height||1;let dW=logoW*0.86;let dH=dW/aspect;if(dH>logoH*0.86){dH=logoH*0.86;dW=dH*aspect}
+const dx=cx+(logoW-dW)/2;const dy=cy+(logoH-dH)/2;try{ctx.drawImage(logo,dx,dy,dW,dH)}catch(e){}
+const barH=Math.floor(h*0.32);const y0=h-barH;const grad=ctx.createLinearGradient(0,y0,0,h);grad.addColorStop(0,'rgba(0,0,0,0)');grad.addColorStop(0.18,'rgba(0,0,0,0.92)');grad.addColorStop(1,'rgba(0,0,0,0.98)');ctx.fillStyle=grad;ctx.fillRect(0,y0,w,barH);
+ctx.fillStyle='#ffcc00';ctx.fillRect(dongkerW,y0,w-dongkerW,Math.floor(h*0.012));
+const base=w/100;const tx=dongkerW+w*0.045;ctx.textBaseline='top';ctx.fillStyle='#ffcc00';ctx.font='bold '+Math.floor(base*4)+'px sans-serif';ctx.fillText('LAPORAN KAMTIB - LAPAS PEKANBARU',tx,y0+base*3);
+ctx.fillStyle='white';ctx.font='bold '+Math.floor(base*3.2)+'px sans-serif';ctx.fillText('📅 '+tgl+' | 🕒 '+jamStr,tx,y0+base*8.5);ctx.fillText('📍 '+lokasi,tx,y0+base*13);
+ctx.font=Math.floor(base*3)+'px sans-serif';const uraianText='📝 '+uraian;const maxW=w-tx-w*0.04;const words=uraianText.split(' ');let line='',yL=y0+base*18.5,lines=0;for(let n=0;n<words.length;n++){const test=line+words[n]+' ';if(ctx.measureText(test).width>maxW&&n>0){ctx.fillText(line,tx,yL);line=words[n]+' ';yL+=base*4;lines++;if(lines>2)break}else line=test}if(lines<=2)ctx.fillText(line,tx,yL);
+lastDataUrl=canvas.toDataURL('image/jpeg',0.92);document.getElementById('hasilImg').src=lastDataUrl;
+document.getElementById('placeholder').style.display='none';document.getElementById('resultWrap').style.display='block';
+document.getElementById('actionRow').style.display='flex';document.getElementById('okMsg').style.display='block';
+};img.src=ev.target.result;};reader.readAsDataURL(file);});
+function downloadFoto(){if(!lastDataUrl)return;const a=document.createElement('a');a.href=lastDataUrl;a.download='KAMTIB_V2_'+Date.now()+'.jpg';a.click();}
+function ulangFoto(){document.getElementById('fileInput').value='';document.getElementById('fileInput').click();}
+</script>
+</body>
+</html>
