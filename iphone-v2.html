@@ -60,7 +60,7 @@ ctx.drawImage(img,0,0);
 const dongkerW=Math.floor(w*0.038);ctx.fillStyle='#0a1931';ctx.fillRect(0,0,dongkerW,h);
 ctx.fillStyle='#ffcc00';ctx.fillRect(dongkerW,0,Math.floor(w*0.014),h);
 const logo=document.getElementById('logoRajawali');
-const logoW=Math.floor(w*0.52);const logoH=Math.floor(h*0.34);const cx=(w-logoW)/2;const cy=Math.floor(h*0.02);
+const logoW=Math.floor(w*0.36);const logoH=Math.floor(h*0.22);const cx=(w-logoW)/2;const cy=Math.floor(h*0.02);
 ctx.save();ctx.fillStyle='white';const rad=Math.floor(w*0.04);
 ctx.beginPath();ctx.moveTo(cx+rad,cy);ctx.lineTo(cx+logoW-rad,cy);ctx.quadraticCurveTo(cx+logoW,cy,cx+logoW,cy+rad);ctx.lineTo(cx+logoW,cy+logoH-rad);ctx.quadraticCurveTo(cx+logoW,cy+logoH,cx+logoW-rad,cy+logoH);ctx.lineTo(cx+rad,cy+logoH);ctx.quadraticCurveTo(cx,cy+logoH,cx,cy+logoH-rad);ctx.lineTo(cx,cy+rad);ctx.quadraticCurveTo(cx,cy,cx+rad,cy);ctx.closePath();ctx.fill();ctx.restore();
 const aspect=logo.width/logo.height||1;let dW=logoW*0.86;let dH=dW/aspect;if(dH>logoH*0.86){dH=logoH*0.86;dW=dH*aspect}
