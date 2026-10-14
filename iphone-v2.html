@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>LAPORAN KAMTIB V2 - LOGO KIRI TRANSPARAN</title>
+<title>LAPORAN KAMTIB - LOGO KIRI</title>
 <style>
 *{margin:0;padding:0;box-sizing:border-box}
 body{background:#0a1931;font-family:Arial,sans-serif;padding:10px}
@@ -23,7 +23,7 @@ button{border:none;padding:14px;font-weight:bold;border-radius:8px;font-size:16p
 </style>
 </head>
 <body>
-<h2>LAPORAN KAMTIB<br>LOGO KIRI TRANSPARAN</h2>
+<h2>LAPORAN KAMTIB<br>LAPAS PEKANBARU</h2>
 <div id="placeholder">📸 Belum ada foto<br><small style="color:white">Klik "BUKA KAMERA"</small></div>
 <div id="canvasWrap"><canvas id="preview"></canvas></div>
 <div class="controls">
@@ -33,11 +33,11 @@ button{border:none;padding:14px;font-weight:bold;border-radius:8px;font-size:16p
 <div class="zoomRow"><label>🔍 Zoom:</label><input type="range" id="zoomSlider" min="50" max="150" value="100"><span id="zoomVal" style="color:white">100%</span></div>
 <label>📍 Blok / Lokasi:</label>
 <select id="blok">
-<option>Blok A - Lapas Pekanbaru</option><option>Blok B - Lapas Pekanbaru</option><option>Blok C</option><option>Blok D</option><option>Blok E</option><option>Blok F</option>
+<option>Blok A - Lapas Pekanbaru</option><option>Blok B</option><option>Blok C</option><option>Blok D</option><option>Blok E</option><option>Blok F</option>
 <option>Blok BPN</option><option>Blok Tipikor</option><option>Blok Narkoba</option><option>Blok Wanita</option>
 <option>Pos Tinggi 1</option><option>Pos Tinggi 2</option><option>Pos Tinggi 3</option><option>Pos Tinggi 4</option>
-<option>Pos Wasrik</option><option>Pos P2U</option><option>Pos Komando</option>
-<option>Area Steril</option><option>Area Brandgang</option><option>Dapur Lapas</option><option>Klinik Lapas</option><option>Aula</option><option>Lapangan</option><option>Masjid</option><option>Gereja</option><option>Ruang Kunjungan</option><option>Ruang KPLP</option><option>Ruang Kamtib</option>
+<option>Pos Wasrik</option><option>Pos P2U - Pintu Utama</option><option>Pos Komando</option>
+<option>Area Steril</option><option>Area Brandgang</option><option>Dapur Lapas</option><option>Klinik</option><option>Aula</option><option>Lapangan</option><option>Masjid</option><option>Gereja</option><option>Ruang Kunjungan</option><option>Ruang KPLP</option><option>Ruang Kamtib</option>
 <option>Lapas Pekanbaru - Umum</option>
 </select>
 <label>📝 Uraian:</label><input type="text" id="uraian" value="Kegiatan perawatan senjata api">
@@ -47,9 +47,7 @@ button{border:none;padding:14px;font-weight:bold;border-radius:8px;font-size:16p
 const canvas=document.getElementById('preview');const ctx=canvas.getContext('2d');
 const canvasWrap=document.getElementById('canvasWrap');const placeholder=document.getElementById('placeholder');
 let img=null;let zoom=100;
-// LOGO BARU KEMENIMIPAS KIRI TRANSPARAN
-let logoKemen=new Image();logoKemen.crossOrigin="anonymous";logoKemen.src="logo-kemen.png";logoKemen.onerror=()=>{logoKemen=null;console.log("logo-kemen.png tidak ditemukan");};
-
+let logoKemen=new Image();logoKemen.crossOrigin="anonymous";logoKemen.src="logo-kemen.png";logoKemen.onerror=()=>{logoKemen=null;};
 const fotoInput=document.getElementById('fotoInput');const zoomSlider=document.getElementById('zoomSlider');const zoomVal=document.getElementById('zoomVal');
 zoomSlider.addEventListener('input',(e)=>{zoom=parseInt(e.target.value);zoomVal.textContent=zoom+"%";if(img)draw();});
 fotoInput.addEventListener('change',(e)=>{
@@ -71,24 +69,18 @@ ctx.fillStyle="#000";ctx.fillRect(0,0,canvas.width,canvas.height);
 const zoomFactor=zoom/100;const drawW=baseW*zoomFactor;const drawH=fotoH*zoomFactor;
 const offsetX=(baseW-drawW)/2;const offsetY=(fotoH-drawH)/2;
 ctx.drawImage(img,offsetX,offsetY,drawW,drawH);
-
-// === LOGO KIRI TRANSPARAN - WATERMARK ===
 if(logoKemen && logoKemen.complete && logoKemen.naturalWidth>0){
   const d=Math.floor(baseW*0.03);const k=Math.floor(baseW*0.01);
-  const logoSize = Math.floor(baseW * 0.18); // 18% lebar - agak besar tapi transparan
-  const logoX = d + k + 25; // SEBELAH KIRI
-  const logoY = Math.floor(fotoH * 0.18); // 18% dari atas foto
-
+  const logoSize=Math.floor(baseW*0.19);
+  const logoX=d+k+30;
+  const logoY=Math.floor(fotoH*0.16);
   ctx.save();
-  ctx.globalAlpha = 0.35; // 35% TRANSPARAN - TIDAK NUTUPIN WAJAH
-  ctx.drawImage(logoKemen, logoX, logoY, logoSize, logoSize);
+  ctx.globalAlpha=0.38;
+  ctx.drawImage(logoKemen,logoX,logoY,logoSize,logoSize);
   ctx.restore();
 }
-
-// LATAR PUTIH BAWAH
 ctx.fillStyle="white";ctx.fillRect(0,fotoH,baseW,textH);
 ctx.fillStyle="#ffcc00";ctx.fillRect(0,fotoH,baseW,6);
-// TULISAN
 const d=Math.floor(baseW*0.03);const k=Math.floor(baseW*0.01);
 const marginX=d+k+35;const marginY=42;
 ctx.fillStyle="#0a1931";ctx.font="bold 26px Arial";ctx.fillText("LAPORAN KAMTIB - LAPAS PEKANBARU",marginX,fotoH+marginY);
@@ -100,7 +92,6 @@ const blok=document.getElementById('blok').value;const uraian=document.getElemen
 ctx.fillStyle="#333";ctx.font="bold 17px Arial";ctx.fillText("📍 "+blok,marginX,fotoH+marginY+58);
 ctx.fillStyle="#555";ctx.font="15px Arial";let uraianTxt=uraian;if(uraianTxt.length>80)uraianTxt=uraianTxt.substring(0,80)+"...";
 ctx.fillText(uraianTxt,marginX,fotoH+marginY+82);
-// GARIS PINGGIR
 const totalH=fotoH+textH;
 ctx.fillStyle="#0a1931";ctx.fillRect(0,0,baseW,d);ctx.fillRect(0,totalH-d,baseW,d);ctx.fillRect(0,0,d,totalH);ctx.fillRect(baseW-d,0,d,totalH);
 ctx.fillStyle="#ffcc00";ctx.fillRect(d,d,baseW-2*d,k);ctx.fillRect(d,totalH-d-k,baseW-2*d,k);ctx.fillRect(d,d,k,totalH-2*d);ctx.fillRect(baseW-d-k,d,k,totalH-2*d);
