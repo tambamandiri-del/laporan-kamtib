@@ -8,7 +8,7 @@
 *{margin:0;padding:0;box-sizing:border-box}
 body{background:#0a1931;font-family:Arial,sans-serif;padding:10px}
 h2{text-align:center;color:#ffcc00;font-size:16px;margin-bottom:8px}
-#canvasWrap{width:100%;max-width:500px;margin:0 auto;background:#000;border:3px solid #ffcc00;border-radius:8px;overflow:hidden}
+#canvasWrap{width:100%;max-width:500px;margin:0 auto;background:#000;border:3px solid #ffcc00;border-radius:8px;overflow:hidden;display:none}
 #preview{width:100%;height:auto;display:block;max-height:65vh;object-fit:contain}
 .controls{max-width:500px;margin:10px auto;background:#122845;padding:12px;border-radius:8px;display:flex;flex-direction:column;gap:8px}
 label{color:#ffcc00;font-size:12px;font-weight:bold}
@@ -16,11 +16,16 @@ input,select{padding:10px;border-radius:6px;border:none}
 button{background:#ffcc00;color:#0a1931;border:none;padding:14px;font-weight:bold;border-radius:8px;font-size:16px}
 .zoomRow{display:flex;gap:8px;align-items:center}
 .zoomRow input{flex:1}
+#placeholder{max-width:500px;margin:0 auto;background:#122845;border:2px dashed #ffcc00;border-radius:8px;padding:40px 20px;text-align:center;color:#ffcc00}
 </style>
 </head>
 <body>
 <h2>LAPORAN KAMTIB<br>LAPAS PEKANBARU - FIX ZOOM</h2>
+
+<div id="placeholder">📸 Belum ada foto<br><small style="color:white">Klik "Choose file" di bawah untuk pilih foto kegiatan</small></div>
+
 <div id="canvasWrap"><canvas id="preview"></canvas></div>
+
 <div class="controls">
 <label>📸 Foto Kegiatan:</label>
 <input type="file" id="fotoInput" accept="image/*" capture="environment">
@@ -28,23 +33,25 @@ button{background:#ffcc00;color:#0a1931;border:none;padding:14px;font-weight:bol
 <label>📍 Blok:</label><select id="blok"><option>Blok A - Lapas Pekanbaru</option><option>Blok B - Lapas Pekanbaru</option><option>Blok C</option><option>Blok D</option></select>
 <label>📝 Uraian:</label><input type="text" id="uraian" value="Kegiatan pengamanan Kamtib aman kondusif.">
 <button onclick="download()">⬇️ DOWNLOAD</button>
-<p style="color:#aaa;font-size:10px;text-align:center">Jika logo tidak muncul, upload file logo-lapas.png ke GitHub</p>
 </div>
-<script>
-const canvas=document.getElementById('preview');const ctx=canvas.getContext('2d');let img=null;let zoom=100;
-let logoImg=new Image();logoImg.crossOrigin="anonymous";
-// COBA 3 NAMA FILE LOGO YANG UMUM
-const logoFiles=["logo-lapas.png","logo.png","LAPAS.png","logo-lapas-pku.png"];
-let logoIndex=0;
-function tryLoadLogo(){logoImg.src=logoFiles[logoIndex]+"?t="+Date.now();}
-tryLoadLogo();
-logoImg.onerror=()=>{logoIndex++;if(logoIndex<logoFiles.length){tryLoadLogo();}else{logoImg=null;console.log("Logo tidak ditemukan, pakai fallback teks");}};
-logoImg.onload=()=>{if(img)draw();};
 
+<script>
+const canvas=document.getElementById('preview');const ctx=canvas.getContext('2d');
+const canvasWrap=document.getElementById('canvasWrap');const placeholder=document.getElementById('placeholder');
+let img=null;let zoom=100;
+let logoImg=new Image();logoImg.crossOrigin="anonymous";logoImg.src="logo-lapas.png";logoImg.onerror=()=>{logoImg=null;};
 const fotoInput=document.getElementById('fotoInput');const zoomSlider=document.getElementById('zoomSlider');const zoomVal=document.getElementById('zoomVal');
 zoomSlider.addEventListener('input',(e)=>{zoom=parseInt(e.target.value);zoomVal.textContent=zoom+"%";if(img)draw();});
-fotoInput.addEventListener('change',(e)=>{const file=e.target.files[0];if(!file)return;const reader=new FileReader();reader.onload=(ev)=>{img=new Image();img.onload=()=>{zoom=100;zoomSlider.value=100;zoomVal.textContent="100%";draw();};img.src=ev.target.result;};reader.readAsDataURL(file);});
-
+fotoInput.addEventListener('change',(e)=>{
+  const file=e.target.files[0];if(!file)return;
+  const reader=new FileReader();reader.onload=(ev)=>{
+    img=new Image();img.onload=()=>{
+      zoom=100;zoomSlider.value=100;zoomVal.textContent="100%";
+      placeholder.style.display="none";canvasWrap.style.display="block";
+      draw();
+    };img.src=ev.target.result;
+  };reader.readAsDataURL(file);
+});
 function draw(){
 if(!img)return;
 const baseW=1080;const imgAspect=img.width/img.height;let fotoH=baseW/imgAspect;if(fotoH>800)fotoH=800;
@@ -56,20 +63,12 @@ ctx.drawImage(img,offsetX,offsetY,drawW,drawH);
 const d=Math.floor(baseW*0.03);const k=Math.floor(baseW*0.01);
 ctx.fillStyle="#0a1931";ctx.fillRect(0,0,baseW,d);ctx.fillRect(0,fotoH-d,baseW,d);ctx.fillRect(0,0,d,fotoH);ctx.fillRect(baseW-d,0,d,fotoH);
 ctx.fillStyle="#ffcc00";ctx.fillRect(d,d,baseW-2*d,k);ctx.fillRect(d,fotoH-d-k,baseW-2*d,k);ctx.fillRect(d,d,k,fotoH-2*d);ctx.fillRect(baseW-d-k,d,k,fotoH-2*d);
-// LOGO BULAN BULAT KECIL
 const logoW=Math.floor(baseW*0.10);const logoH=Math.floor(logoW*1.25);
 const cx=(baseW-logoW)/2;const cy=Math.floor(d+k+15);
 const centerX=cx+logoW/2;const centerY=cy+logoH/2;
 const radius=Math.max(logoW,logoH)/2+Math.floor(baseW*0.004);
 ctx.save();ctx.beginPath();ctx.arc(centerX,centerY,radius,0,Math.PI*2);ctx.fillStyle="white";ctx.fill();ctx.restore();
-if(logoImg&&logoImg.complete&&logoImg.naturalWidth>0){
-ctx.drawImage(logoImg,cx,cy,logoW,logoH);
-}else{
-// FALLBACK JIKA LOGO GAGAL - TULIS LAPAS DI DALAM BULAN PUTIH
-ctx.fillStyle="#0a1931";ctx.font="bold 20px Arial";ctx.textAlign="center";
-ctx.fillText("LAPAS",centerX,centerY+5);
-ctx.textAlign="left";
-}
+if(logoImg&&logoImg.complete&&logoImg.naturalWidth>0){ctx.drawImage(logoImg,cx,cy,logoW,logoH);}
 ctx.fillStyle="rgba(0,0,0,0.88)";ctx.fillRect(0,fotoH,baseW,textH);
 ctx.fillStyle="#ffcc00";ctx.fillRect(0,fotoH,baseW,4);
 ctx.fillStyle="#ffcc00";ctx.font="bold 30px Arial";ctx.fillText("LAPORAN KAMTIB - LAPAS PEKANBARU",18,fotoH+32);
