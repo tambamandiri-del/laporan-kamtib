@@ -2,7 +2,7 @@
 <html lang="id">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>LAPORAN KAMTIB V2 - FIX ZOOM + BULAN BULAT</title>
 <style>
 *{margin:0;padding:0;box-sizing:border-box}
@@ -12,7 +12,7 @@ h2{text-align:center;color:#ffcc00;font-size:16px;margin-bottom:8px}
 #preview{width:100%;height:auto;display:block;max-height:65vh;object-fit:contain}
 .controls{max-width:500px;margin:10px auto;background:#122845;padding:12px;border-radius:8px;display:flex;flex-direction:column;gap:8px}
 label{color:#ffcc00;font-size:12px;font-weight:bold}
-input,select{padding:10px;border-radius:6px;border:none;font-size:14px}
+input,select{padding:10px;border-radius:6px;border:none}
 button{background:#ffcc00;color:#0a1931;border:none;padding:14px;font-weight:bold;border-radius:8px;font-size:16px}
 .zoomRow{display:flex;gap:8px;align-items:center}
 .zoomRow input{flex:1}
@@ -25,17 +25,63 @@ button{background:#ffcc00;color:#0a1931;border:none;padding:14px;font-weight:bol
 <label>📸 Foto Kegiatan:</label>
 <input type="file" id="fotoInput" accept="image/*" capture="environment">
 <div class="zoomRow"><label>🔍 Zoom:</label><input type="range" id="zoomSlider" min="50" max="150" value="100"><span id="zoomVal" style="color:white">100%</span></div>
-<label>📍 Blok:</label><select id="blok"><option>Blok A - Lapas Pekanbaru</option><option>Blok B - Lapas Pekanbaru</option><option>Blok C - Lapas Pekanbaru</option><option>Blok D - Lapas Pekanbaru</option><option>Area Pintu Utama</option></select>
+<label>📍 Blok:</label><select id="blok"><option>Blok A - Lapas Pekanbaru</option><option>Blok B - Lapas Pekanbaru</option><option>Blok C</option><option>Blok D</option></select>
 <label>📝 Uraian:</label><input type="text" id="uraian" value="Kegiatan pengamanan Kamtib aman kondusif.">
 <button onclick="download()">⬇️ DOWNLOAD</button>
+<p style="color:#aaa;font-size:10px;text-align:center">Jika logo tidak muncul, upload file logo-lapas.png ke GitHub</p>
 </div>
 <script>
 const canvas=document.getElementById('preview');const ctx=canvas.getContext('2d');let img=null;let zoom=100;
-let logoImg=new Image();logoImg.crossOrigin="anonymous";logoImg.src="logo-lapas.png";logoImg.onerror=()=>{logoImg=null;};
+let logoImg=new Image();logoImg.crossOrigin="anonymous";
+// COBA 3 NAMA FILE LOGO YANG UMUM
+const logoFiles=["logo-lapas.png","logo.png","LAPAS.png","logo-lapas-pku.png"];
+let logoIndex=0;
+function tryLoadLogo(){logoImg.src=logoFiles[logoIndex]+"?t="+Date.now();}
+tryLoadLogo();
+logoImg.onerror=()=>{logoIndex++;if(logoIndex<logoFiles.length){tryLoadLogo();}else{logoImg=null;console.log("Logo tidak ditemukan, pakai fallback teks");}};
+logoImg.onload=()=>{if(img)draw();};
+
 const fotoInput=document.getElementById('fotoInput');const zoomSlider=document.getElementById('zoomSlider');const zoomVal=document.getElementById('zoomVal');
 zoomSlider.addEventListener('input',(e)=>{zoom=parseInt(e.target.value);zoomVal.textContent=zoom+"%";if(img)draw();});
 fotoInput.addEventListener('change',(e)=>{const file=e.target.files[0];if(!file)return;const reader=new FileReader();reader.onload=(ev)=>{img=new Image();img.onload=()=>{zoom=100;zoomSlider.value=100;zoomVal.textContent="100%";draw();};img.src=ev.target.result;};reader.readAsDataURL(file);});
-function draw(){if(!img)return;const baseW=1080;const imgAspect=img.width/img.height;let fotoH=baseW/imgAspect;if(fotoH>800)fotoH=800;const textH=160;canvas.width=baseW;canvas.height=fotoH+textH;ctx.fillStyle="#000";ctx.fillRect(0,0,canvas.width,canvas.height);const zoomFactor=zoom/100;const drawW=baseW*zoomFactor;const drawH=fotoH*zoomFactor;const offsetX=(baseW-drawW)/2;const offsetY=(fotoH-drawH)/2;ctx.drawImage(img,offsetX,offsetY,drawW,drawH);const d=Math.floor(baseW*0.03);const k=Math.floor(baseW*0.01);ctx.fillStyle="#0a1931";ctx.fillRect(0,0,baseW,d);ctx.fillRect(0,fotoH-d,baseW,d);ctx.fillRect(0,0,d,fotoH);ctx.fillRect(baseW-d,0,d,fotoH);ctx.fillStyle="#ffcc00";ctx.fillRect(d,d,baseW-2*d,k);ctx.fillRect(d,fotoH-d-k,baseW-2*d,k);ctx.fillRect(d,d,k,fotoH-2*d);ctx.fillRect(baseW-d-k,d,k,fotoH-2*d);const logoW=Math.floor(baseW*0.10);const logoH=Math.floor(logoW*1.25);const cx=(baseW-logoW)/2;const cy=Math.floor(d+k+15);const centerX=cx+logoW/2;const centerY=cy+logoH/2;const radius=Math.max(logoW,logoH)/2+Math.floor(baseW*0.004);ctx.save();ctx.beginPath();ctx.arc(centerX,centerY,radius,0,Math.PI*2);ctx.fillStyle="white";ctx.fill();ctx.restore();if(logoImg&&logoImg.complete&&logoImg.naturalWidth>0){ctx.drawImage(logoImg,cx,cy,logoW,logoH);}ctx.fillStyle="rgba(0,0,0,0.88)";ctx.fillRect(0,fotoH,baseW,textH);ctx.fillStyle="#ffcc00";ctx.fillRect(0,fotoH,baseW,4);ctx.fillStyle="#ffcc00";ctx.font="bold 30px Arial";ctx.fillText("LAPORAN KAMTIB - LAPAS PEKANBARU",18,fotoH+32);ctx.fillStyle="white";ctx.font="20px Arial";const now=new Date();const tgl=now.toLocaleDateString('id-ID',{day:'2-digit',month:'short',year:'numeric'});const jam=now.toLocaleTimeString('id-ID',{hour:'2-digit',minute:'2-digit'})+" WIB";ctx.fillText("📅 "+tgl+" | 🕒 "+jam,18,fotoH+65);const blok=document.getElementById('blok').value;const uraian=document.getElementById('uraian').value;ctx.font="18px Arial";ctx.fillText("📍 "+blok,18,fotoH+90);ctx.font="14px Arial";ctx.fillStyle="#ccc";let uraianTxt=uraian;if(uraianTxt.length>85)uraianTxt=uraianTxt.substring(0,85)+"...";ctx.fillText(uraianTxt,18,fotoH+115);ctx.fillStyle="#ffcc00";ctx.fillRect(0,fotoH+textH-4,baseW,4);}
+
+function draw(){
+if(!img)return;
+const baseW=1080;const imgAspect=img.width/img.height;let fotoH=baseW/imgAspect;if(fotoH>800)fotoH=800;
+const textH=160;canvas.width=baseW;canvas.height=fotoH+textH;
+ctx.fillStyle="#000";ctx.fillRect(0,0,canvas.width,canvas.height);
+const zoomFactor=zoom/100;const drawW=baseW*zoomFactor;const drawH=fotoH*zoomFactor;
+const offsetX=(baseW-drawW)/2;const offsetY=(fotoH-drawH)/2;
+ctx.drawImage(img,offsetX,offsetY,drawW,drawH);
+const d=Math.floor(baseW*0.03);const k=Math.floor(baseW*0.01);
+ctx.fillStyle="#0a1931";ctx.fillRect(0,0,baseW,d);ctx.fillRect(0,fotoH-d,baseW,d);ctx.fillRect(0,0,d,fotoH);ctx.fillRect(baseW-d,0,d,fotoH);
+ctx.fillStyle="#ffcc00";ctx.fillRect(d,d,baseW-2*d,k);ctx.fillRect(d,fotoH-d-k,baseW-2*d,k);ctx.fillRect(d,d,k,fotoH-2*d);ctx.fillRect(baseW-d-k,d,k,fotoH-2*d);
+// LOGO BULAN BULAT KECIL
+const logoW=Math.floor(baseW*0.10);const logoH=Math.floor(logoW*1.25);
+const cx=(baseW-logoW)/2;const cy=Math.floor(d+k+15);
+const centerX=cx+logoW/2;const centerY=cy+logoH/2;
+const radius=Math.max(logoW,logoH)/2+Math.floor(baseW*0.004);
+ctx.save();ctx.beginPath();ctx.arc(centerX,centerY,radius,0,Math.PI*2);ctx.fillStyle="white";ctx.fill();ctx.restore();
+if(logoImg&&logoImg.complete&&logoImg.naturalWidth>0){
+ctx.drawImage(logoImg,cx,cy,logoW,logoH);
+}else{
+// FALLBACK JIKA LOGO GAGAL - TULIS LAPAS DI DALAM BULAN PUTIH
+ctx.fillStyle="#0a1931";ctx.font="bold 20px Arial";ctx.textAlign="center";
+ctx.fillText("LAPAS",centerX,centerY+5);
+ctx.textAlign="left";
+}
+ctx.fillStyle="rgba(0,0,0,0.88)";ctx.fillRect(0,fotoH,baseW,textH);
+ctx.fillStyle="#ffcc00";ctx.fillRect(0,fotoH,baseW,4);
+ctx.fillStyle="#ffcc00";ctx.font="bold 30px Arial";ctx.fillText("LAPORAN KAMTIB - LAPAS PEKANBARU",18,fotoH+32);
+ctx.fillStyle="white";ctx.font="20px Arial";const now=new Date();
+const tgl=now.toLocaleDateString('id-ID',{day:'2-digit',month:'short',year:'numeric'});
+const jam=now.toLocaleTimeString('id-ID',{hour:'2-digit',minute:'2-digit'})+" WIB";
+ctx.fillText("📅 "+tgl+" | 🕒 "+jam,18,fotoH+65);
+const blok=document.getElementById('blok').value;const uraian=document.getElementById('uraian').value;
+ctx.font="18px Arial";ctx.fillText("📍 "+blok,18,fotoH+90);
+ctx.font="14px Arial";ctx.fillStyle="#ccc";let uraianTxt=uraian;if(uraianTxt.length>85)uraianTxt=uraianTxt.substring(0,85)+"...";
+ctx.fillText(uraianTxt,18,fotoH+115);ctx.fillStyle="#ffcc00";ctx.fillRect(0,fotoH+textH-4,baseW,4);
+}
 function download(){if(!img){alert("Pilih foto dulu Bang!");return;}draw();const link=document.createElement('a');link.download="KAMTIB-"+Date.now()+".jpg";link.href=canvas.toDataURL('image/jpeg',0.92);link.click();}
 </script>
 </body>
