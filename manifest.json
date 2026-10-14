@@ -1,7 +1,7 @@
 {
   "name": "Laporan Kamtib Lapas Pekanbaru",
   "short_name": "Kamtib Lapas",
-  "description": "Aplikasi Laporan Kamtib Lapas Pekanbaru - Foto + Watermark + Laporan",
+  "description": "Aplikasi Laporan Kamtib Lapas Pekanbaru",
   "start_url": "./iphone-v2.html",
   "display": "standalone",
   "background_color": "#0a1931",
@@ -9,14 +9,19 @@
   "orientation": "portrait",
   "icons": [
     {
-      "src": "https://cdn-icons-png.flaticon.com/512/1041/1041916.png",
+      "src": "icon-512.png",
       "sizes": "512x512",
       "type": "image/png",
       "purpose": "any maskable"
     },
     {
-      "src": "https://cdn-icons-png.flaticon.com/512/1041/1041916.png",
+      "src": "icon-192.png",
       "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "icon-180.png",
+      "sizes": "180x180",
       "type": "image/png"
     }
   ]
